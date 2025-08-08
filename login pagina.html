@@ -1,0 +1,986 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Login</title>
+    <style>
+        /* Estilos Gerais e para o Body */
+        :root {
+            --primary-color: #007bff;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+            --light-gray-color: #f8f9fa;
+            --border-color: #dee2e6;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: var(--light-gray-color);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Container do Formulário */
+        .form-container {
+            width: 100%;
+            max-width: 420px;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        /* Logo */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-container svg {
+            width: 50px;
+            height: auto;
+            color: var(--dark-color);
+        }
+
+        /* Grupos de Formulário */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        /* Campos de Input */
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper .icon {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: var(--gray-color);
+            pointer-events: none;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 15px 0 45px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        .form-input::placeholder {
+            color: #999;
+        }
+
+        /* Opções abaixo dos inputs */
+        .form-options {
+            margin-bottom: 25px;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .remember-me label {
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+
+        .forgot-password {
+            font-size: 14px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        /* Botões */
+        .btn {
+            width: 100%;
+            height: 50px;
+            padding: 0 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background-color: var(--dark-color);
+            color: #ffffff;
+            margin-bottom: 25px;
+        }
+        .btn-primary:hover {
+            background-color: #343a40;
+        }
+        
+        .social-buttons {
+            display: flex;
+            flex-direction: column; /* Empilha os botões */
+            gap: 10px; /* Espaço entre os botões */
+        }
+
+        .btn-social {
+            background-color: #ffffff;
+            color: #444;
+            border: 1px solid var(--border-color);
+            font-weight: 500;
+        }
+        .btn-social:hover {
+            background-color: #f7f7f7;
+        }
+        .btn-social svg, .btn-social img {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Texto e Links de Rodapé */
+        .footer-text {
+            text-align: center;
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+
+        .footer-text a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Separador "Ou entre com" */
+        .separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--gray-color);
+            font-size: 13px;
+            margin: 25px 0;
+        }
+        .separator::before,
+        .separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .separator:not(:empty)::before {
+            margin-right: .5em;
+        }
+        .separator:not(:empty)::after {
+            margin-left: .5em;
+        }
+
+        /* Modal de Cadastro */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            margin: 20px auto;
+            padding: 40px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+            box-sizing: border-box;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .close {
+            color: var(--gray-color);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .close:hover {
+            background-color: var(--light-gray-color);
+            color: var(--dark-color);
+        }
+
+        .modal-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .modal-form .btn {
+            margin-top: 10px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .modal {
+                padding: 15px;
+            }
+            
+            .modal-content {
+                margin: 10px auto;
+                padding: 30px 25px;
+                max-width: 100%;
+            }
+            
+            .modal-title {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal {
+                padding: 10px;
+            }
+            
+            .modal-content {
+                margin: 5px auto;
+                padding: 25px 20px;
+            }
+            
+            .modal-title {
+                font-size: 20px;
+            }
+            
+            .modal-header {
+                margin-bottom: 25px;
+            }
+            
+            .modal-form .form-group {
+                margin-bottom: 18px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .modal-content {
+                padding: 20px 15px;
+            }
+            
+            .modal-title {
+                font-size: 18px;
+            }
+            
+            .close {
+                width: 25px;
+                height: 25px;
+                font-size: 24px;
+            }
+        }
+
+        /* Loading states */
+        .btn-loading {
+            position: relative;
+            color: transparent !important;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error states */
+        .form-input.error {
+            border-color: #dc3545;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <div class="logo-container">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-12h2v4h-2zm0 6h2v2h-2z"></path>
+            </svg>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+            <a href="landing-barbearia.html" style="color: var(--primary-color); text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 5px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Voltar para a página inicial
+            </a>
+        </div>
+
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <div class="input-wrapper">
+                    <span class="icon">@</span>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="Digite seu email" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <div class="input-wrapper">
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V9z"/>
+                    </svg>
+                    <input type="password" id="password" name="password" class="form-input" placeholder="Digite sua senha" required>
+                </div>
+            </div>
+
+            <div class="form-options">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Lembre-se de mim</label>
+                </div>
+                <a href="#" class="forgot-password">Esqueceu a senha?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Entrar</button>
+
+            <div class="footer-text">
+                Não tem uma conta? <a href="#" id="cadastro-link">Cadastre-se</a>
+            </div>
+
+            <div class="separator">Ou entre com</div>
+
+            <div class="social-buttons">
+                <button type="button" class="btn btn-social" id="google-login">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google logo">
+                    Google
+                </button>
+                <button type="button" class="btn btn-social" id="apple-login">
+                    <svg fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 .134a7.832 7.832 0 0 0-2.94.585c-.936.346-1.854.9-2.585 1.627a4.13 4.13 0 0 0-1.42 2.374c-.119.532-.176 1.139-.176 1.704 0 .611.067 1.258.196 1.834.142.637.404 1.242.754 1.777.345.525.794 1.01 1.342 1.433.56.425 1.144.755 1.758.956.62.2 1.254.303 1.898.303.62 0 1.229-.098 1.82-.295.6-.2 1.16-.503 1.69-.897.52-.392.93-.847 1.25-1.355a.31.31 0 0 0-.25-.494c-.26-.04-.52-.067-.78-.067-.72 0-1.36.21-1.92.596-.51.346-.92.82-1.21 1.407-.28-.15-.55-.303-.81-.465-.48-.292-.88-.66-1.18-1.083-.3-.42-.51-.89-.6-1.385a5.55 5.55 0 0 1 .15-2.26c.21-.62.56-1.16 1.01-1.58.45-.42.98-.71 1.57-.85.59-.14 1.2-.14 1.78 0 .1.023.19.05.28.08.21.06.41.13.62.21a.31.31 0 0 0 .39-.23c.12-.41.23-.83.33-1.25a4.16 4.16 0 0 0-.66-2.19C10.743.76 9.426.135 8 .135zm.014 1.328c1.07 0 2.05.378 2.82.995a2.97 2.97 0 0 0 1.21 1.73c-.04.42-.1.83-.17 1.23a3.15 3.15 0 0 0-2.31-1.05c-1.63 0-2.95 1.29-2.95 3.03 0 1.3.77 2.4 1.89 2.85a.31.31 0 0 0 .23.01c.28-.09.56-.16.85-.21.29-.05.58-.07.87-.07.18 0 .36 0 .53.02a.31.31 0 0 0 .38-.28c.02-.12.04-.24.05-.36 0-2.14-1.76-3.9-3.92-3.9z"/>
+                    </svg>
+                    Apple
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal de Cadastro -->
+    <div id="cadastro-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Criar Conta</h2>
+                <button class="close" id="close-modal">&times;</button>
+            </div>
+            
+            <form class="modal-form" id="cadastro-form">
+                <div class="form-group">
+                    <label for="nome">Nome Completo</label>
+                    <div class="input-wrapper">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                        </svg>
+                        <input type="text" id="nome" name="nome" class="form-input" placeholder="Digite seu nome completo" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email-cadastro">Email</label>
+                    <div class="input-wrapper">
+                        <span class="icon">@</span>
+                        <input type="email" id="email-cadastro" name="email-cadastro" class="form-input" placeholder="Digite seu email" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="senha-cadastro">Senha</label>
+                    <div class="input-wrapper">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V9z"/>
+                        </svg>
+                        <input type="password" id="senha-cadastro" name="senha-cadastro" class="form-input" placeholder="Digite sua senha" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmar-senha">Confirmar Senha</label>
+                    <div class="input-wrapper">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V9z"/>
+                        </svg>
+                        <input type="password" id="confirmar-senha" name="confirmar-senha" class="form-input" placeholder="Confirme sua senha" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="remember-me">
+                        <input type="checkbox" id="termos" required>
+                        <label for="termos">Concordo com os <a href="#" style="color: var(--primary-color);">Termos de Uso</a> e <a href="#" style="color: var(--primary-color);">Política de Privacidade</a></label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Criar Conta</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Sistema de Autenticação com Backend Real
+        class AuthManager {
+            constructor() {
+                this.apiUrl = 'http://localhost:3000/api';
+                this.currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+                this.accessToken = localStorage.getItem('accessToken') || null;
+                this.refreshToken = localStorage.getItem('refreshToken') || null;
+            }
+
+            // Função para fazer requisições à API
+            async apiRequest(endpoint, options = {}) {
+                const url = `${this.apiUrl}${endpoint}`;
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                };
+
+                // Adicionar token de autorização se existir
+                if (this.accessToken) {
+                    config.headers.Authorization = `Bearer ${this.accessToken}`;
+                }
+
+                try {
+                    const response = await fetch(url, config);
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.error || 'Erro na requisição');
+                    }
+
+                    return data;
+                } catch (error) {
+                    console.error('Erro na API:', error);
+                    throw error;
+                }
+            }
+
+            // Cadastrar novo usuário
+            async register(userData) {
+                try {
+                    const response = await this.apiRequest('/auth/register', {
+                        method: 'POST',
+                        body: JSON.stringify(userData)
+                    });
+
+                    this.setTokens(response.accessToken, response.refreshToken);
+                    this.setCurrentUser(response.user);
+                    return response.user;
+                } catch (error) {
+                    throw new Error(error.message);
+                }
+            }
+
+            // Login com email/senha
+            async login(email, password) {
+                try {
+                    const response = await this.apiRequest('/auth/login', {
+                        method: 'POST',
+                        body: JSON.stringify({ email, password })
+                    });
+
+                    this.setTokens(response.accessToken, response.refreshToken);
+                    this.setCurrentUser(response.user);
+                    return response.user;
+                } catch (error) {
+                    throw new Error(error.message);
+                }
+            }
+
+            // Login com Google
+            async loginWithGoogle(idToken) {
+                try {
+                    const response = await this.apiRequest('/auth/google', {
+                        method: 'POST',
+                        body: JSON.stringify({ idToken })
+                    });
+
+                    this.setTokens(response.accessToken, response.refreshToken);
+                    this.setCurrentUser(response.user);
+                    return response.user;
+                } catch (error) {
+                    throw new Error(error.message);
+                }
+            }
+
+            // Login com Apple
+            async loginWithApple(idToken) {
+                try {
+                    const response = await this.apiRequest('/auth/apple', {
+                        method: 'POST',
+                        body: JSON.stringify({ idToken })
+                    });
+
+                    this.setTokens(response.accessToken, response.refreshToken);
+                    this.setCurrentUser(response.user);
+                    return response.user;
+                } catch (error) {
+                    throw new Error(error.message);
+                }
+            }
+
+            // Logout
+            async logout() {
+                try {
+                    if (this.refreshToken) {
+                        await this.apiRequest('/auth/logout', {
+                            method: 'POST',
+                            body: JSON.stringify({ refreshToken: this.refreshToken })
+                        });
+                    }
+                } catch (error) {
+                    console.error('Erro no logout:', error);
+                } finally {
+                    this.clearTokens();
+                    this.setCurrentUser(null);
+                }
+            }
+
+            // Obter perfil do usuário
+            async getProfile() {
+                try {
+                    const response = await this.apiRequest('/auth/profile');
+                    return response.user;
+                } catch (error) {
+                    throw new Error(error.message);
+                }
+            }
+
+            // Adicionar agendamento
+            async addAppointment(appointment) {
+                try {
+                    const response = await this.apiRequest('/appointments', {
+                        method: 'POST',
+                        body: JSON.stringify(appointment)
+                    });
+                    return response.appointment;
+                } catch (error) {
+                    throw new Error(error.message);
+                }
+            }
+
+            // Obter agendamentos
+            async getAppointments() {
+                try {
+                    const response = await this.apiRequest('/appointments');
+                    return response.appointments;
+                } catch (error) {
+                    throw new Error(error.message);
+                }
+            }
+
+            // Refresh token
+            async refreshAccessToken() {
+                try {
+                    const response = await this.apiRequest('/auth/refresh', {
+                        method: 'POST',
+                        body: JSON.stringify({ refreshToken: this.refreshToken })
+                    });
+
+                    this.setTokens(response.accessToken, response.refreshToken);
+                    return response.accessToken;
+                } catch (error) {
+                    this.clearTokens();
+                    this.setCurrentUser(null);
+                    throw new Error('Sessão expirada. Faça login novamente.');
+                }
+            }
+
+            // Funções auxiliares
+            setTokens(accessToken, refreshToken) {
+                this.accessToken = accessToken;
+                this.refreshToken = refreshToken;
+                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('refreshToken', refreshToken);
+            }
+
+            clearTokens() {
+                this.accessToken = null;
+                this.refreshToken = null;
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+            }
+
+            setCurrentUser(user) {
+                this.currentUser = user;
+                if (user) {
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                } else {
+                    localStorage.removeItem('currentUser');
+                }
+            }
+
+            getCurrentUser() {
+                return this.currentUser;
+            }
+
+            isAuthenticated() {
+                return !!this.accessToken && !!this.currentUser;
+            }
+        }
+
+        // Inicializar gerenciador de autenticação
+        const authManager = new AuthManager();
+
+        // Elementos do DOM
+        const cadastroLink = document.getElementById('cadastro-link');
+        const cadastroModal = document.getElementById('cadastro-modal');
+        const closeModal = document.getElementById('close-modal');
+        const cadastroForm = document.getElementById('cadastro-form');
+        const loginForm = document.getElementById('login-form');
+        const googleLoginBtn = document.getElementById('google-login');
+        const appleLoginBtn = document.getElementById('apple-login');
+
+        // Abrir modal de cadastro
+        cadastroLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            cadastroModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+                document.getElementById('nome').focus();
+            }, 100);
+        });
+
+        // Fechar modal de cadastro
+        closeModal.addEventListener('click', function() {
+            cadastroModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        // Fechar modal clicando fora dele
+        window.addEventListener('click', function(e) {
+            if (e.target === cadastroModal) {
+                cadastroModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Fechar modal com tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && cadastroModal.style.display === 'block') {
+                cadastroModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Processar formulário de cadastro
+        cadastroForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email-cadastro').value;
+            const senha = document.getElementById('senha-cadastro').value;
+            const confirmarSenha = document.getElementById('confirmar-senha').value;
+            const termos = document.getElementById('termos').checked;
+
+            // Validações
+            if (!nome || !email || !senha || !confirmarSenha) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            if (senha !== confirmarSenha) {
+                alert('As senhas não coincidem.');
+                return;
+            }
+
+            if (senha.length < 6) {
+                alert('A senha deve ter pelo menos 6 caracteres.');
+                return;
+            }
+
+            if (!termos) {
+                alert('Você deve concordar com os termos de uso.');
+                return;
+            }
+
+            try {
+                const submitBtn = cadastroForm.querySelector('button[type="submit"]');
+                submitBtn.textContent = 'Criando conta...';
+                submitBtn.disabled = true;
+
+                const newUser = await authManager.register({
+                    name: nome,
+                    email: email,
+                    password: senha
+                });
+                
+                alert('Conta criada com sucesso! Redirecionando para o dashboard...');
+                
+                // Limpar formulário e fechar modal
+                cadastroForm.reset();
+                cadastroModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                
+                // Redirecionar para o dashboard
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+                
+            } catch (error) {
+                alert(error.message);
+            } finally {
+                const submitBtn = cadastroForm.querySelector('button[type="submit"]');
+                submitBtn.textContent = 'Criar Conta';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Processar formulário de login
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+            
+            try {
+                const submitBtn = loginForm.querySelector('button[type="submit"]');
+                submitBtn.textContent = 'Entrando...';
+                submitBtn.classList.add('btn-loading');
+                submitBtn.disabled = true;
+                
+                const user = await authManager.login(email, password);
+                
+                alert('Login realizado com sucesso! Redirecionando para o dashboard...');
+                window.location.href = 'dashboard.html';
+                
+            } catch (error) {
+                alert(error.message);
+            } finally {
+                const submitBtn = loginForm.querySelector('button[type="submit"]');
+                submitBtn.textContent = 'Entrar';
+                submitBtn.classList.remove('btn-loading');
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Login com Google (modo desenvolvimento)
+        googleLoginBtn.addEventListener('click', async function() {
+            const btn = this;
+            btn.textContent = 'Conectando...';
+            btn.classList.add('btn-loading');
+            btn.disabled = true;
+            
+            try {
+                // Em modo de desenvolvimento, simular login Google
+                const mockToken = 'mock_google_token_' + Date.now();
+                const user = await authManager.loginWithGoogle(mockToken);
+                
+                alert('Login com Google realizado com sucesso! (modo dev) Redirecionando...');
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                alert('Erro ao conectar com Google: ' + error.message);
+            } finally {
+                btn.textContent = 'Google';
+                btn.classList.remove('btn-loading');
+                btn.disabled = false;
+            }
+        });
+
+        // Para produção, descomente e configure:
+        /*
+        function initializeGoogleAuth() {
+            google.accounts.id.initialize({
+                client_id: 'YOUR_GOOGLE_CLIENT_ID', // Configure no Google Cloud Console
+                callback: handleGoogleCredential
+            });
+            google.accounts.id.prompt();
+        }
+
+        async function handleGoogleCredential(response) {
+            try {
+                const user = await authManager.loginWithGoogle(response.credential);
+                alert('Login com Google realizado com sucesso! Redirecionando...');
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                alert(error.message);
+            } finally {
+                const btn = document.getElementById('google-login');
+                btn.textContent = 'Google';
+                btn.classList.remove('btn-loading');
+                btn.disabled = false;
+            }
+        }
+        */
+
+        // Login com Apple (modo desenvolvimento)
+        appleLoginBtn.addEventListener('click', async function() {
+            const btn = this;
+            btn.textContent = 'Conectando...';
+            btn.classList.add('btn-loading');
+            btn.disabled = true;
+            
+            try {
+                // Em modo de desenvolvimento, simular login Apple
+                const mockToken = 'mock_apple_token_' + Date.now();
+                const user = await authManager.loginWithApple(mockToken);
+                
+                alert('Login com Apple realizado com sucesso! (modo dev) Redirecionando...');
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                alert('Erro ao conectar com Apple: ' + error.message);
+            } finally {
+                btn.textContent = 'Apple';
+                btn.classList.remove('btn-loading');
+                btn.disabled = false;
+            }
+        });
+
+        // Para produção, descomente e configure:
+        /*
+        function initializeAppleAuth() {
+            AppleID.auth.init({
+                clientId: 'com.barbearia.ducorte', // Configure no Apple Developer Console
+                scope: 'name email',
+                redirectURI: window.location.origin + '/login',
+                state: 'origin:web'
+            });
+            
+            AppleID.auth.signIn().then(async (response) => {
+                try {
+                    const user = await authManager.loginWithApple(response.authorization.id_token);
+                    alert('Login com Apple realizado com sucesso! Redirecionando...');
+                    window.location.href = 'dashboard.html';
+                } catch (error) {
+                    alert(error.message);
+                } finally {
+                    const btn = document.getElementById('apple-login');
+                    btn.textContent = 'Apple';
+                    btn.classList.remove('btn-loading');
+                    btn.disabled = false;
+                }
+            }).catch((error) => {
+                alert('Erro no login com Apple: ' + error.message);
+                const btn = document.getElementById('apple-login');
+                btn.textContent = 'Apple';
+                btn.classList.remove('btn-loading');
+                btn.disabled = false;
+            });
+        }
+        */
+
+        // Validação de senha em tempo real
+        document.getElementById('confirmar-senha').addEventListener('input', function() {
+            const senha = document.getElementById('senha-cadastro').value;
+            const confirmarSenha = this.value;
+            
+            if (confirmarSenha && senha !== confirmarSenha) {
+                this.style.borderColor = '#dc3545';
+            } else {
+                this.style.borderColor = '';
+            }
+        });
+
+        // Verificar se já está logado
+        if (authManager.isAuthenticated()) {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+
+</body>
+</html>

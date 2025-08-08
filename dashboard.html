@@ -1,0 +1,580 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | BC Ducorte</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Google Fonts: Lora (Serif) e Inter (Sans-serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@500;600&display=swap" rel="stylesheet">
+
+    <script>
+        // Configuração do Tailwind com a identidade visual combinada
+        tailwind.config = {
+            theme: {
+                extend: {
+                    // Paleta de cores combinada para ambos os layouts
+                    colors: {
+                        // Cores do Dashboard
+                        'background': '#F5F3EF',
+                        'text-primary': '#111827',
+                        'text-secondary': '#6B7280',
+                        // Cores do Agendamento
+                        'brand-yellow': '#D6A329',
+                        'brand-dark': '#202020',
+                        'brand-gray-dark': '#2B2B2B',
+                        'brand-gray-light': '#3C3C3C',
+                    },
+                    // Fontes personalizadas
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'serif': ['Lora', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Estilos Gerais */
+        body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+        /* Animações de Transição de Página */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-10px); } }
+
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        .fade-out { animation: fadeOut 0.4s ease-in forwards; }
+        
+        /* Estilos do Modal de Agendamento */
+        .modal { display: none; animation: fadeInModal 0.3s ease-out; }
+        .modal.active { display: flex; }
+        .modal-content-animated { animation: slide-up 0.3s ease-out; }
+        @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slide-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .progress-bar-fill { transition: width 0.5s ease-in-out; }
+    </style>
+
+</head>
+<body class="bg-background font-sans text-text-primary">
+
+    <div class="flex min-h-screen">
+        <!-- =================================== -->
+        <!--      BARRA LATERAL (FIXA)           -->
+        <!-- =================================== -->
+        <aside class="w-64 bg-background p-8 flex-col hidden md:flex">
+            <div class="mb-12">
+                 <h1 class="font-serif text-4xl font-semibold tracking-tighter text-text-primary">BC</h1>
+                 <p class="font-sans text-sm tracking-widest text-text-secondary -mt-1">DUCORTE</p>
+            </div>
+            <nav class="flex flex-col flex-grow space-y-2">
+                <a href="#" class="flex items-center p-3 text-text-primary font-bold bg-gray-200/60 rounded-lg">
+                    <i class="fa-solid fa-house w-6 text-center"></i><span class="ml-4">Início</span>
+                </a>
+                <a href="#" class="flex items-center p-3 text-text-secondary hover:bg-gray-200/60 rounded-lg">
+                    <i class="fa-solid fa-calendar-days w-6 text-center"></i><span class="ml-4">Agendamentos</span>
+                </a>
+                <a href="#" class="flex items-center p-3 text-text-secondary hover:bg-gray-200/60 rounded-lg">
+                    <i class="fa-solid fa-star w-6 text-center"></i><span class="ml-4">Clube do assinante</span>
+                </a>
+            </nav>
+            <div>
+                 <a href="#" id="logout-btn" class="flex items-center p-3 text-text-secondary hover:bg-gray-200/60 rounded-lg">
+                    <i class="fa-solid fa-arrow-right-from-bracket w-6 text-center"></i><span class="ml-4">Sair</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- =================================== -->
+        <!--      CONTEÚDO PRINCIPAL (DINÂMICO)  -->
+        <!-- =================================== -->
+        <main class="flex-1">
+
+            <!-- ========= PÁGINA 1: DASHBOARD ========= -->
+            <div id="dashboard-view" class="p-6 md:p-12">
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-white p-6 rounded-lg border border-gray-200 mb-8">
+                        <h2 class="font-serif text-lg font-semibold text-text-primary mb-1">Seu plano</h2>
+                        <p class="text-text-secondary mb-4">Você ainda não assinou um plano. Contrate e aproveite os benefícios.</p>
+                        <a href="#" class="font-semibold text-text-primary hover:text-black group">Contrate um plano <i class="fa-solid fa-arrow-right text-xs ml-1 transition-transform group-hover:translate-x-1"></i></a>
+                    </div>
+                    <div class="bg-black text-white p-6 rounded-lg flex justify-between items-center mb-12">
+                        <div>
+                            <h3 class="font-serif text-lg font-semibold">Conheça o Clube do assinante</h3>
+                            <p class="text-gray-300 text-sm">e pague seu cupom com vantagens</p>
+                        </div>
+                        <a href="#" class="bg-gray-800 h-10 w-10 flex items-center justify-center rounded-full hover:bg-gray-700 transition-colors"><i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="font-serif text-xl font-semibold text-text-primary">Próximos agendamentos</h2>
+                        <a href="#" class="font-semibold text-sm text-text-secondary hover:text-text-primary">Ver tudo</a>
+                    </div>
+                    <div class="appointments-list">
+                        <!-- Os agendamentos serão carregados dinamicamente aqui -->
+                    </div>
+                    
+                    <!-- Botão de novo agendamento -->
+                    <div class="text-center mt-6">
+                        <button id="show-booking-button" class="bg-black text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors">
+                            <i class="fa-solid fa-plus mr-2"></i>Novo agendamento
+                        </button>
+                    </div>
+                </div>
+            </div>
+                </div>
+            </div>
+
+            <!-- ========= PÁGINA 2: AGENDAMENTO (ESCONDIDA INICIALMENTE) ========= -->
+            <div id="booking-view" class="bg-brand-dark text-white h-full hidden">
+                <div class="container mx-auto p-4 sm:p-6 max-w-lg">
+                    <button id="back-to-dashboard-button" class="mb-4 text-brand-yellow hover:text-yellow-300">
+                        <i class="fas fa-arrow-left mr-2"></i>Voltar ao Painel
+                    </button>
+                    <div id="progress-header" class="mb-8">
+                        <h1 class="text-2xl font-bold mb-4 text-center">Novo Agendamento</h1>
+                        <div class="w-full bg-brand-gray-dark rounded-full h-2">
+                            <div id="progress-bar" class="bg-brand-yellow h-2 rounded-full progress-bar-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                    <main id="summary-view" class="space-y-3">
+                         <button id="open-filial-modal" class="summary-button w-full bg-brand-gray-dark p-4 rounded-lg flex items-center justify-between text-left transition-opacity">
+                            <div class="flex items-center"><i class="fas fa-store fa-lg w-8 text-center text-brand-yellow"></i><p>Filial</p></div>
+                            <span id="selected-filial" class="font-bold text-gray-300">Selecione</span>
+                        </button>
+                         <button id="open-professional-modal" class="summary-button w-full bg-brand-gray-dark p-4 rounded-lg flex items-center justify-between text-left transition-opacity" disabled>
+                            <div class="flex items-center"><i class="fas fa-user-friends fa-lg w-8 text-center text-brand-yellow"></i><p>Profissional</p></div>
+                            <span id="selected-professional" class="font-bold text-gray-300">Selecione</span>
+                        </button>
+                         <button id="open-service-modal" class="summary-button w-full bg-brand-gray-dark p-4 rounded-lg flex items-center justify-between text-left transition-opacity" disabled>
+                            <div class="flex items-center"><i class="fas fa-cut fa-lg w-8 text-center text-brand-yellow"></i><p>Serviço</p></div>
+                            <span id="selected-service" class="font-bold text-gray-300">Selecione</span>
+                        </button>
+                         <button id="open-datetime-modal" class="summary-button w-full bg-brand-gray-dark p-4 rounded-lg flex items-center justify-between text-left transition-opacity" disabled>
+                            <div class="flex items-center"><i class="fas fa-calendar-alt fa-lg w-8 text-center text-brand-yellow"></i><p>Data e Hora</p></div>
+                            <span id="selected-datetime" class="font-bold text-gray-300">Selecione</span>
+                        </button>
+                        <div class="pt-6">
+                            <button id="confirm-booking-button" class="w-full bg-brand-yellow text-brand-dark font-bold p-4 rounded-lg transition-all" disabled>Confirmar Agendamento</button>
+                        </div>
+                    </main>
+                    <section id="success-screen" class="hidden text-center py-10">
+                        <div class="mb-4">
+                            <svg class="animate-bounce mx-auto w-16 h-16 text-brand-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-brand-yellow mb-2">Agendamento Confirmado!</h2>
+                        <p class="text-gray-300" id="success-summary"></p>
+                        <button id="restart-button" class="mt-6 bg-brand-yellow text-brand-dark font-bold py-2 px-4 rounded-lg transition-all">Agendar Novamente</button>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAIS DO AGENDAMENTO (permanecem fora da estrutura principal) -->
+    <div id="filial-modal" class="modal fixed inset-0 bg-black bg-opacity-75 items-end justify-center z-50"> <div class="modal-content-animated bg-brand-gray-dark w-full max-w-lg rounded-t-2xl p-5"><h2 class="text-lg font-bold text-center mb-6 text-white">Selecione a Filial</h2><div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-center"><button data-step="branch" data-value="Filial Centro" class="modal-choice bg-brand-gray-light p-6 rounded-lg hover:bg-brand-yellow hover:text-brand-dark"><i class="fas fa-store mb-2 text-2xl"></i><br>Filial Centro</button><button data-step="branch" data-value="Bom Viver" class="modal-choice bg-brand-gray-light p-6 rounded-lg hover:bg-brand-yellow hover:text-brand-dark"><i class="fas fa-store-alt mb-2 text-2xl"></i><br>Bom Viver</button></div></div></div>
+    <div id="professional-modal" class="modal fixed inset-0 bg-black bg-opacity-75 items-end justify-center z-50"><div class="modal-content-animated bg-brand-gray-dark w-full max-w-lg rounded-t-2xl p-5"><h2 class="text-lg font-bold text-center mb-6 text-white">Selecione o Profissional</h2><div class="grid grid-cols-3 gap-4 text-center"><button data-step="professional" data-value="Cristofer" class="modal-choice p-2 rounded-lg hover:bg-brand-gray-light"><div class="relative"><img src="https://i.ibb.co/L5QGZ4D/cristofer.png" class="w-full h-24 object-cover rounded-lg"><span class="absolute bottom-0 left-0 bg-brand-yellow text-brand-dark text-xs font-bold px-2 py-1 rounded-tr-lg rounded-bl-lg"><i class="fas fa-star text-xs mr-1"></i>Destaque</span></div><p class="mt-2 font-semibold">Cristofer</p></button><button data-step="professional" data-value="Diego Soares" class="modal-choice p-2 rounded-lg hover:bg-brand-gray-light"><img src="https://i.ibb.co/3kL2WSp/diego.png" class="w-full h-24 object-cover rounded-lg"><p class="mt-2 font-semibold">Diego Soares</p></button><button data-step="professional" data-value="Sem preferência" class="modal-choice p-2 rounded-lg hover:bg-brand-gray-light"><div class="w-full h-24 bg-brand-gray-light rounded-lg flex items-center justify-center"><i class="fas fa-user-tie text-4xl text-gray-400"></i></div><p class="mt-2 font-semibold">Sem preferência</p></button></div></div></div>
+    <div id="service-modal" class="modal fixed inset-0 bg-black bg-opacity-75 items-end justify-center z-50"><div class="modal-content-animated bg-brand-gray-dark w-full max-w-lg rounded-t-2xl p-5"><h2 class="text-lg font-bold text-center mb-6 text-white">Escolha o Serviço</h2><div class="space-y-3"><button data-step="service" data-value="Corte" class="modal-choice w-full text-left bg-brand-gray-light p-4 rounded-lg hover:bg-brand-yellow hover:text-brand-dark flex justify-between items-center"><span><i class="fas fa-cut mr-3"></i>Corte</span><span class="font-bold">R$45,00</span></button><button data-step="service" data-value="Barba" class="modal-choice w-full text-left bg-brand-gray-light p-4 rounded-lg hover:bg-brand-yellow hover:text-brand-dark flex justify-between items-center"><span><i class="fas fa-user-ninja mr-3"></i>Barba</span><span class="font-bold">R$30,00</span></button></div></div></div>
+    <div id="datetime-modal" class="modal fixed inset-0 bg-black bg-opacity-75 items-end justify-center z-50"><div class="modal-content-animated bg-brand-gray-dark w-full max-w-lg rounded-t-2xl p-5"><h2 class="text-lg font-bold text-center mb-6 text-white">Escolha a Data e Hora</h2><input type="date" id="date-picker" class="w-full p-3 rounded bg-brand-gray-light border-2 border-transparent focus:border-brand-yellow focus:outline-none"><div id="time-slots" class="grid grid-cols-3 gap-3 mt-4"><p class="col-span-3 text-center text-gray-400">Selecione uma data para ver os horários</p></div></div></div>
+
+    <!-- =================================== -->
+    <!--          JAVASCRIPT (LÓGICA)        -->
+    <!-- =================================== -->
+    <script>
+        // Sistema de Autenticação com Backend Real
+        class AuthManager {
+            constructor() {
+                this.apiUrl = 'http://localhost:3000/api';
+                this.currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+                this.accessToken = localStorage.getItem('accessToken') || null;
+                this.refreshToken = localStorage.getItem('refreshToken') || null;
+            }
+
+            async apiRequest(endpoint, options = {}) {
+                const url = `${this.apiUrl}${endpoint}`;
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                };
+
+                if (this.accessToken) {
+                    config.headers.Authorization = `Bearer ${this.accessToken}`;
+                }
+
+                try {
+                    const response = await fetch(url, config);
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        // Se o token expirou, tentar refresh
+                        if (response.status === 403 && this.refreshToken) {
+                            try {
+                                await this.refreshAccessToken();
+                                // Tentar a requisição novamente
+                                if (this.accessToken) {
+                                    config.headers.Authorization = `Bearer ${this.accessToken}`;
+                                    const retryResponse = await fetch(url, config);
+                                    const retryData = await retryResponse.json();
+                                    
+                                    if (!retryResponse.ok) {
+                                        throw new Error(retryData.error || 'Erro na requisição');
+                                    }
+                                    return retryData;
+                                }
+                            } catch (refreshError) {
+                                // Se o refresh falhar, redirecionar para login
+                                this.clearTokens();
+                                this.setCurrentUser(null);
+                                window.location.href = 'login pagina.html';
+                                throw new Error('Sessão expirada. Faça login novamente.');
+                            }
+                        }
+                        throw new Error(data.error || 'Erro na requisição');
+                    }
+
+                    return data;
+                } catch (error) {
+                    console.error('Erro na API:', error);
+                    throw error;
+                }
+            }
+
+            async logout() {
+                try {
+                    if (this.refreshToken) {
+                        await this.apiRequest('/auth/logout', {
+                            method: 'POST',
+                            body: JSON.stringify({ refreshToken: this.refreshToken })
+                        });
+                    }
+                } catch (error) {
+                    console.error('Erro no logout:', error);
+                } finally {
+                    this.clearTokens();
+                    this.setCurrentUser(null);
+                }
+            }
+
+            async addAppointment(appointment) {
+                try {
+                    const response = await this.apiRequest('/appointments', {
+                        method: 'POST',
+                        body: JSON.stringify(appointment)
+                    });
+                    return response.appointment;
+                } catch (error) {
+                    throw new Error(error.message);
+                }
+            }
+
+            async getAppointments() {
+                try {
+                    const response = await this.apiRequest('/appointments');
+                    return response.appointments;
+                } catch (error) {
+                    throw new Error(error.message);
+                }
+            }
+
+            async refreshAccessToken() {
+                try {
+                    const response = await fetch(`${this.apiUrl}/auth/refresh`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ refreshToken: this.refreshToken })
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.error || 'Erro ao renovar token');
+                    }
+
+                    this.setTokens(data.accessToken, data.refreshToken);
+                    return data.accessToken;
+                } catch (error) {
+                    this.clearTokens();
+                    this.setCurrentUser(null);
+                    throw new Error('Sessão expirada. Faça login novamente.');
+                }
+            }
+
+            clearTokens() {
+                this.accessToken = null;
+                this.refreshToken = null;
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+            }
+
+            setTokens(accessToken, refreshToken) {
+                this.accessToken = accessToken;
+                this.refreshToken = refreshToken;
+                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('refreshToken', refreshToken);
+            }
+
+            setCurrentUser(user) {
+                this.currentUser = user;
+                if (user) {
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                } else {
+                    localStorage.removeItem('currentUser');
+                }
+            }
+
+            getCurrentUser() {
+                return this.currentUser;
+            }
+
+            isAuthenticated() {
+                return !!this.accessToken && !!this.currentUser;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const authManager = new AuthManager();
+            const currentUser = authManager.getCurrentUser();
+
+            // Verificar se o usuário está logado
+            if (!authManager.isAuthenticated()) {
+                alert('Você precisa estar logado para acessar o dashboard.');
+                window.location.href = 'login pagina.html';
+                return;
+            }
+
+            // Atualizar informações do usuário na interface
+            updateUserInfo(currentUser);
+
+            // --- LÓGICA DE TRANSIÇÃO DE PÁGINA ---
+            const dashboardView = document.getElementById('dashboard-view');
+            const bookingView = document.getElementById('booking-view');
+            const showBookingBtn = document.getElementById('show-booking-button');
+            const backToDashboardBtn = document.getElementById('back-to-dashboard-button');
+
+            const switchToBooking = () => {
+                dashboardView.classList.add('fade-out');
+                dashboardView.addEventListener('animationend', () => {
+                    dashboardView.classList.add('hidden');
+                    dashboardView.classList.remove('fade-out');
+                    bookingView.classList.remove('hidden');
+                    bookingView.classList.add('fade-in');
+                }, { once: true });
+            };
+
+            const switchToDashboard = () => {
+                bookingView.classList.add('fade-out');
+                bookingView.addEventListener('animationend', () => {
+                    bookingView.classList.add('hidden');
+                    bookingView.classList.remove('fade-out');
+                    dashboardView.classList.remove('hidden');
+                    dashboardView.classList.add('fade-in');
+                }, { once: true });
+            };
+            
+            showBookingBtn.addEventListener('click', switchToBooking);
+            backToDashboardBtn.addEventListener('click', switchToDashboard);
+
+            // --- LÓGICA DO FORMULÁRIO DE AGENDAMENTO ---
+            const userSelections = { branch: null, professional: null, service: null, datetime: null };
+            const totalSteps = Object.keys(userSelections).length;
+
+            const ui = {
+                buttons: {
+                    branch: document.getElementById('open-filial-modal'), professional: document.getElementById('open-professional-modal'), service: document.getElementById('open-service-modal'), datetime: document.getElementById('open-datetime-modal'), confirm: document.getElementById('confirm-booking-button'), restart: document.getElementById('restart-button'),
+                },
+                modals: {
+                    branch: document.getElementById('filial-modal'), professional: document.getElementById('professional-modal'), service: document.getElementById('service-modal'), datetime: document.getElementById('datetime-modal'),
+                },
+                displays: {
+                    branch: document.getElementById('selected-filial'), professional: document.getElementById('selected-professional'), service: document.getElementById('selected-service'), datetime: document.getElementById('selected-datetime'),
+                },
+                progressBar: document.getElementById('progress-bar'), datePicker: document.getElementById('date-picker'), timeSlots: document.getElementById('time-slots'), summaryView: document.getElementById('summary-view'), successScreen: document.getElementById('success-screen'), successSummary: document.getElementById('success-summary'),
+            };
+
+            const availableTimes = ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00"];
+
+            function updateUIState() {
+                const completedSteps = Object.values(userSelections).filter(v => v !== null).length;
+                ui.progressBar.style.width = `${(completedSteps / totalSteps) * 100}%`;
+                ui.buttons.professional.disabled = !userSelections.branch;
+                ui.buttons.service.disabled = !userSelections.professional;
+                ui.buttons.datetime.disabled = !userSelections.service;
+                ui.buttons.confirm.disabled = completedSteps !== totalSteps;
+                document.querySelectorAll('.summary-button, #confirm-booking-button').forEach(btn => {
+                    btn.classList.toggle('opacity-50', btn.disabled);
+                    btn.classList.toggle('cursor-not-allowed', btn.disabled);
+                });
+            }
+
+            function handleSelection(step, value) {
+                userSelections[step] = value;
+                ui.displays[step].textContent = value;
+                closeModal(ui.modals[step]);
+                updateUIState();
+            }
+
+            function openModal(modal) { modal.classList.add('active'); }
+            function closeModal(modal) { modal.classList.remove('active'); }
+
+            ui.buttons.branch.addEventListener('click', () => openModal(ui.modals.branch));
+            ui.buttons.professional.addEventListener('click', () => openModal(ui.modals.professional));
+            ui.buttons.service.addEventListener('click', () => openModal(ui.modals.service));
+            ui.buttons.datetime.addEventListener('click', () => openModal(ui.modals.datetime));
+
+            Object.values(ui.modals).forEach(modal => {
+                modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(modal); });
+            });
+
+            document.querySelectorAll('.modal-choice').forEach(choice => {
+                choice.addEventListener('click', () => { handleSelection(choice.dataset.step, choice.dataset.value); });
+            });
+
+            ui.datePicker.addEventListener('change', () => {
+                const date = new Date(ui.datePicker.value + 'T00:00:00');
+                ui.timeSlots.innerHTML = '';
+                availableTimes.forEach(time => {
+                    const btn = document.createElement('button');
+                    btn.className = "p-3 bg-brand-gray-light rounded hover:bg-brand-yellow hover:text-brand-dark transition-colors";
+                    btn.textContent = time;
+                    btn.onclick = () => {
+                        const formattedDate = date.toLocaleDateString('pt-BR');
+                        handleSelection('datetime', `${formattedDate} às ${time}`);
+                    };
+                    ui.timeSlots.appendChild(btn);
+                });
+            });
+
+            ui.buttons.confirm.addEventListener('click', async () => {
+                try {
+                    // Salvar agendamento no sistema
+                    const appointment = {
+                        branch: userSelections.branch,
+                        professional: userSelections.professional,
+                        service: userSelections.service,
+                        datetime: userSelections.datetime
+                    };
+
+                    await authManager.addAppointment(appointment);
+
+                    ui.summaryView.classList.add('hidden');
+                    document.getElementById('progress-header').classList.add('hidden');
+                    ui.successSummary.textContent = `Seu agendamento de ${userSelections.service} com ${userSelections.professional} para ${userSelections.datetime} na filial ${userSelections.branch} está confirmado.`;
+                    ui.successScreen.classList.remove('hidden');
+
+                    // Atualizar lista de agendamentos no dashboard
+                    setTimeout(() => {
+                        updateAppointmentsList();
+                    }, 1000);
+                } catch (error) {
+                    alert('Erro ao criar agendamento: ' + error.message);
+                }
+            });
+
+            ui.buttons.restart.addEventListener('click', () => {
+                for (let key in userSelections) userSelections[key] = null;
+                Object.values(ui.displays).forEach(d => d.textContent = 'Selecione');
+                ui.successScreen.classList.add('hidden');
+                ui.summaryView.classList.remove('hidden');
+                document.getElementById('progress-header').classList.remove('hidden');
+                updateUIState();
+            });
+
+            ui.datePicker.setAttribute('min', new Date().toISOString().split('T')[0]);
+            updateUIState();
+
+            // Função para atualizar informações do usuário
+            function updateUserInfo(user) {
+                // Adicionar nome do usuário no dashboard se houver um elemento para isso
+                const userNameElements = document.querySelectorAll('.user-name');
+                userNameElements.forEach(el => {
+                    el.textContent = user.name;
+                });
+            }
+
+            // Função para atualizar lista de agendamentos
+            async function updateAppointmentsList() {
+                try {
+                    const appointments = await authManager.getAppointments();
+                    const appointmentsContainer = document.querySelector('.appointments-list');
+                    
+                    if (appointmentsContainer) {
+                        if (appointments.length === 0) {
+                            appointmentsContainer.innerHTML = `
+                                <div class="text-center py-8">
+                                    <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fa-solid fa-calendar text-2xl text-text-secondary"></i>
+                                    </div>
+                                    <p class="text-text-secondary mb-4">Você não tem agendamentos marcados</p>
+                                </div>
+                            `;
+                        } else {
+                            appointmentsContainer.innerHTML = appointments.map(appointment => `
+                                <div class="bg-white border border-gray-200 rounded-lg p-4 mb-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h3 class="font-semibold text-text-primary">${appointment.service}</h3>
+                                            <p class="text-text-secondary text-sm">${appointment.professional}</p>
+                                            <p class="text-text-secondary text-sm">${appointment.branch}</p>
+                                            <p class="text-text-secondary text-sm">${appointment.datetime}</p>
+                                        </div>
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+                                            ${appointment.status}
+                                        </span>
+                                    </div>
+                                </div>
+                            `).join('');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar agendamentos:', error);
+                    const appointmentsContainer = document.querySelector('.appointments-list');
+                    if (appointmentsContainer) {
+                        appointmentsContainer.innerHTML = `
+                            <div class="text-center py-8">
+                                <div class="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fa-solid fa-exclamation-triangle text-2xl text-red-500"></i>
+                                </div>
+                                <p class="text-red-500 mb-4">Erro ao carregar agendamentos</p>
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            // Atualizar lista de agendamentos ao carregar a página
+            await updateAppointmentsList();
+
+            // Funcionalidade de logout
+            const logoutBtn = document.getElementById('logout-btn');
+            logoutBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                try {
+                    await authManager.logout();
+                    alert('Logout realizado com sucesso!');
+                    window.location.href = 'landing-barbearia.html';
+                } catch (error) {
+                    console.error('Erro no logout:', error);
+                    // Limpar dados locais mesmo se houver erro
+                    authManager.clearTokens();
+                    authManager.setCurrentUser(null);
+                    window.location.href = 'landing-barbearia.html';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

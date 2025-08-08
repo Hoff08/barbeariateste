@@ -1,0 +1,424 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbearia Premium - Seu novo estilo começa aqui</title>
+    
+    <!-- Fontes do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Inclusão da Biblioteca Swiper.js (CSS) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <style>
+        /* ============================ */
+        /*   ESTILO VISUAL COMPLETO     */
+        /* ============================ */
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: #f6f5ef; color: #0e0e0e; line-height: 1.4; overflow-x: hidden; }
+        
+        /* --- Seções e Containers --- */
+        .hero-section {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 95vh; padding: 120px 48px 80px; text-align: center; position: relative;
+        }
+        .page-section { padding: 80px 48px; }
+        .content-container { max-width: 1200px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 32px; }
+        
+        /* --- Elementos de Conteúdo (Hero) --- */
+        .social-proof { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #5f5f5f; margin-bottom: 16px; }
+        .profile-images { display: flex; align-items: center; }
+        .profile-image { width: 28px; height: 28px; border-radius: 50%; border: 3px solid #f6f5ef; margin-left: -12px; transition: transform 0.3s ease; }
+        .profile-image:first-child { margin-left: 0; }
+        .profile-image:hover { transform: scale(1.1); z-index: 10; }
+        .main-headline { font-size: 80px; font-weight: 500; color: #0e0e0e; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 20px; }
+        .highlight-text { color: #f06a42; position: relative; }
+        .highlight-text::after {
+            content: ''; position: absolute; bottom: -8px; left: 0; width: 0; height: 4px; background-color: #f06a42;
+            animation: expandWidth 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards 1.2s;
+        }
+        .sub-headline { font-size: 20px; font-weight: 400; color: #5f5f5f; max-width: 600px; margin-bottom: 32px; }
+        .cta-button {
+            background-color: #f06a42; color: white; border: none; border-radius: 40px; padding: 16px 32px; font-size: 18px;
+            font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.3s ease; position: relative;
+        }
+        .cta-button:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(240, 106, 66, 0.3); }
+        .cta-button:active { transform: scale(0.97); }
+
+        /* --- Tooltip --- */
+        .cta-tooltip {
+            position: absolute; left: 50%; bottom: 125%; transform: translateX(-50%) scale(0.95); background-color: #2c2c2c; color: #f6f5ef; 
+            padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 100; white-space: nowrap; will-change: transform, opacity;
+        }
+        .cta-tooltip::after {
+            content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border-width: 5px; border-style: solid;
+            border-color: #2c2c2c transparent transparent transparent;
+        }
+        .cta-button.show-tooltip .cta-tooltip { opacity: 1; transform: translateX(-50%) scale(1); }
+        
+        /* --- Seções (Hero Images e Barbeiros) --- */
+        .hero-images { display: flex; gap: 20px; max-width: 1200px; width: 100%; justify-content: center; align-items: center; margin-top: 48px; }
+        .hero-image-container {
+            flex: 1; max-width: 320px; aspect-ratio: 1 / 1.2; border-radius: 24px; overflow: hidden; position: relative;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        .hero-image-container:nth-child(1) { transform: rotate(-4deg); }
+        .hero-image-container:nth-child(2) { transform: rotate(2deg); }
+        .hero-image-container:nth-child(3) { transform: rotate(5deg); }
+        .hero-image-container:hover { transform: rotate(0deg) scale(1.05); z-index: 10; }
+        .hero-image-container img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .section-header { display: flex; flex-direction: column; align-items: center; gap: 24px; margin-bottom: 30px; text-align: center; }
+        .section-title { font-size: 48px; font-weight: 500; color: #0e0e0e; letter-spacing: -0.03em; text-align: center; max-width: 800px; }
+        
+        .barbers-container { width: 100%; max-width: 1200px; }
+        .barbers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; width: 100%; }
+        .barbers-grid.swiper { overflow: visible; }
+        .barbers-grid .swiper-wrapper { display: contents; }
+        .barbers-grid .swiper-pagination { display: none; }
+        .barber-card {
+            position: relative; aspect-ratio: 1 / 1.25; border-radius: 28px; overflow: hidden;
+            transition: transform 0.3s ease; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            width: 100% !important;
+        }
+        .barber-card:hover { transform: translateY(-10px); }
+        .barber-image { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: filter 0.4s ease, transform 0.4s ease; }
+        .barber-card:hover .barber-image { filter: grayscale(0%); transform: scale(1.05); }
+        .barber-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+            padding: 40px 25px 25px; color: white; text-align: left;
+        }
+        .barber-name { font-size: 24px; font-weight: 500; margin-bottom: 4px; }
+        .barber-specialty { font-size: 16px; font-weight: 400; color: #dddddd; opacity: 0.9; }
+
+        #location-section { background-color: #ffffff; }
+        .location-subtitle { color: #5f5f5f; font-size: 18px; max-width: 700px; line-height: 1.5; margin-top: -10px; }
+        .map-container {
+            width: 100%; max-width: 1200px; margin-top: -20px; margin-bottom: 50px;
+            border-radius: 28px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        .map-container iframe { display: block; width: 100%; height: 450px; border: 0; filter: grayscale(15%) contrast(95%); }
+        .action-prompt { font-size: 24px; font-weight: 500; color: #0e0e0e; }
+        .location-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; width: 100%; max-width: 1200px; }
+        .action-card { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; }
+        .action-button {
+            display: inline-flex; align-items: center; justify-content: center; width: 100%;
+            padding: 16px 20px; background-color: #fff; color: #333;
+            border: 1px solid #ddd; border-radius: 12px; text-decoration: none;
+            font-size: 16px; font-weight: 600; cursor: pointer;
+            transition: all 0.2s ease-out;
+        }
+        .action-button:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); border-color: #f06a42; color: #f06a42; }
+        .action-button svg { width: 22px; height: 22px; margin-right: 12px; flex-shrink: 0; }
+        .action-card small { font-size: 13px; color: #777; max-width: 220px; }
+        .location-description-mobile { display: none; }
+        
+        .available-for-btn {
+            --animation: 2s ease-in-out infinite;
+            display: flex; align-items: center; column-gap: 2px;
+            color: #f06a42; background-color: #fef0eb; border-radius: 100px;
+            padding: 1rem 1.5rem 1rem 0.5rem; outline: none; border: none;
+            font-size: 18px; font-weight: 600; position: relative;
+            transition: 0.2s ease-in-out; cursor: default;
+        }
+        .available-for-btn:hover { background-color: #fde8e1; }
+        .circle {
+            display: flex; align-items: center; justify-content: center; position: relative;
+            width: 16px; height: 16px; border: solid 2px #f06a42; border-radius: 50%;
+            margin: 0 10px; background-color: transparent; animation: circle-keys var(--animation);
+        }
+        .circle .dot {
+            position: absolute; transform: translate(-50%, -50%); width: 12px; height: 12px;
+            border-radius: 50%; background-color: #f06a42; animation: dot-keys var(--animation);
+        }
+        .circle .outline {
+            position: absolute; transform: translate(-50%, -50%); width: 16px; height: 16px;
+            border-radius: 50%; animation: outline-keys var(--animation);
+        }
+        @keyframes circle-keys { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes dot-keys { 0% { transform: scale(1); } 50% { transform: scale(0); } 100% { transform: scale(1); } }
+        @keyframes outline-keys { 0% { transform: scale(0); box-shadow: 0 0 0 20px #f06a4233; opacity: 1; } 100% { transform: scale(1); box-shadow: 0 0 0 0 #f06a4200; opacity: 0; } }
+        
+        .floating-appointment-btn {
+            position: fixed; bottom: 40px; right: 40px; background: #f06a42; color: white; border: none; border-radius: 50px;
+            padding: 16px 24px; font-size: 16px; font-weight: 600; cursor: pointer; box-shadow: 0 8px 25px rgba(240, 106, 66, 0.4);
+            transition: all 0.3s ease; z-index: 1000; display: flex; align-items: center; gap: 8px;
+        }
+        .floating-appointment-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 35px rgba(240, 106, 66, 0.5); }
+        .appointment-icon { font-size: 20px; }
+
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes expandWidth { from { width: 0; } to { width: 100%; } }
+        .animate { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .animate.visible { opacity: 1; transform: translateY(0); }
+        
+        @media (max-width: 992px) { .main-headline, .section-title { font-size: 64px; } }
+        
+        @media (max-width: 768px) {
+            .hero-section { padding: 100px 16px 80px; min-height: auto; }
+            .page-section, .hero-section { padding-left: 16px; padding-right: 16px; }
+            .page-section { padding-top: 60px; padding-bottom: 60px; }
+            .main-headline { font-size: 48px; }
+            .section-title { font-size: 38px; }
+            .hero-images { flex-direction: column; gap: 20px; }
+            
+            .hero-image-container, .hero-image-container:nth-child(n) { transform: rotate(0deg); max-width: 80%; }
+            .hero-image-container:nth-child(1),
+            .hero-image-container:nth-child(3) { display: none; }
+            
+            .cta-tooltip { white-space: normal; text-align: center; max-width: 80vw; }
+            
+            #professionals-section .section-header { margin-bottom: 20px; }
+            
+            /* --- ESTILOS DO CARROSSEL DE BARBEIROS (CORRIGIDO) --- */
+            .barbers-grid { display: block; padding-bottom: 40px; }
+            .barbers-grid.swiper { overflow: hidden; } /* Esconde o excesso */
+            .barbers-grid .swiper-wrapper { display: flex; }
+            .barber-card.swiper-slide { 
+                width: 85% !important; /* LARGURA AUMENTADA PARA MOBILE */
+                flex-shrink: 0; 
+                box-shadow: 0 8px 25px rgba(0,0,0,0.1); 
+                margin: 0 5px; /* Espaçamento entre slides */
+            }
+            .barbers-grid .swiper-pagination { 
+                display: block; 
+                position: absolute; 
+                bottom: 10px; 
+                left: 50%;
+                transform: translateX(-50%);
+                width: auto;
+            }
+            .swiper-pagination-bullet { 
+                background-color: #b0b0b0; 
+                width: 10px; 
+                height: 10px; 
+                margin: 0 4px;
+                opacity: 0.5;
+            }
+            .swiper-pagination-bullet-active { 
+                background-color: #f06a42; 
+                opacity: 1;
+            }
+            
+            /* Melhorias adicionais para o carrossel mobile */
+            .barber-card {
+                transition: transform 0.3s ease;
+            }
+            .barber-card:hover {
+                transform: translateY(-5px);
+            }
+            .barbers-grid.swiper {
+                padding-bottom: 60px; /* Mais espaço para paginação */
+            }
+            .barbers-grid .swiper-slide {
+                transition: all 0.3s ease;
+            }
+            .barbers-grid .swiper-slide-active {
+                transform: scale(1.02);
+            }
+
+            /* --- ESTILOS DOS BOTÕES DE LOCALIZAÇÃO (MOBILE) --- */
+            .location-actions {
+                display: flex; flex-wrap: nowrap;
+                justify-content: center; gap: 15px;
+            }
+            .action-card { gap: 0; }
+            .action-card small { display: none; }
+            .action-button {
+                width: 56px; height: 56px;
+                padding: 0; border-radius: 50%;
+            }
+            .action-button span { display: none; }
+            .action-button svg { margin-right: 0; width: 28px; height: 28px; }
+            .location-description-mobile {
+                display: block; text-align: center; color: #777;
+                font-size: 14px; margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero-section">
+        <div class="content-container">
+            <div class="social-proof animate"><div class="profile-images"><img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Cliente 1" class="profile-image"><img src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Cliente 2" class="profile-image"><img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Cliente 3" class="profile-image"></div><span>+500 clientes satisfeitos</span></div>
+            <h1 class="main-headline animate">Seu novo estilo<br><span class="highlight-text">começa aqui</span></h1>
+            <p class="sub-headline animate">Barbearia premium com os melhores profissionais da cidade. Cortes modernos, barbas perfeitas e atendimento de primeira.</p>
+            <button class="cta-button animate" id="ctaScheduleBtn" type="button" onclick="window.location.href='login pagina.html'">Agende seu horário →<div class="cta-tooltip" id="ctaTooltip">Nosso plano de assinatura vale a pena. Clique para saber mais!</div></button>
+            <div class="hero-images animate"><div class="hero-image-container"><img src="https://images.pexels.com/photos/3998427/pexels-photo-3998427.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Ambiente da barbearia"></div><div class="hero-image-container"><img src="https://images.pexels.com/photos/3992864/pexels-photo-3992864.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Barbeiro em ação"></div><div class="hero-image-container"><img src="https://images.pexels.com/photos/3160980/pexels-photo-3160980.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Corte de cabelo finalizado"></div></div>
+        </div>
+    </section>
+
+    <section id="professionals-section" class="page-section">
+        <div class="section-header animate"><h2 class="section-title">Conheça os profissionais que vão cuidar do seu estilo</h2></div>
+        
+        <div class="barbers-container animate">
+            <div class="barbers-grid swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide barber-card"><img src="https://images.pexels.com/photos/3778680/pexels-photo-3778680.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Retrato de João Silva" class="barber-image"><div class="barber-overlay"><div class="barber-name">João Silva</div><div class="barber-specialty">@instagram</div></div></div>
+                    <div class="swiper-slide barber-card"><img src="https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Retrato de Carlos Santos" class="barber-image"><div class="barber-overlay"><div class="barber-name">Carlos Santos</div><div class="barber-specialty">@instagram</div></div></div>
+                    <div class="swiper-slide barber-card"><img src="https://images.pexels.com/photos/2033446/pexels-photo-2033446.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Retrato de Pedro Costa" class="barber-image"><div class="barber-overlay"><div class="barber-name">Pedro Costa</div><div class="barber-specialty">@instagram</div></div></div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="location-section" class="page-section">
+        <div class="content-container">
+            <div class="section-header animate" id="location-dynamic-header">
+                <h2 class="section-title">Calculando sua distância...</h2>
+                <p class="location-subtitle" style="margin-top:0;">Para uma experiência personalizada, por favor, permita o acesso à sua localização quando o navegador solicitar.</p>
+            </div>
+            
+            <div class="map-container animate">
+                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3537.9860787046614!2d-48.63969592531168!3d-27.531891619357562!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x952749bde928ca4b%3A0x2a49f763de151!2sBarbearia%20BC%20Ducorte%20%7C%20Bigua%C3%A7u%20-%20Barba%2C%20Cabelo%2C%20Bigode%2C%20Luzes%2C%20Platinado%2C%20Pigmenta%C3%A7%C3%A3o%2C%20Depila%C3%A7%C3%A3o.!5e0!3m2!1spt-BR!2sbr!4v1754575228610!5m2!1spt-BR!2sbr" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+
+            <div class="content-container animate">
+                <h3 class="action-prompt">Como você quer chegar?</h3>
+                <div class="location-actions">
+                    <div class="action-card"><a href="https://maps.app.goo.gl/v6ZXPssCTvXGPPGr7" target="_blank" class="action-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>Abrir no Google Maps</span></a><small>Basta clicar e você será redirecionado direto para a rota!</small></div>
+                    <div class="action-card"><a href="https://m.uber.com/looking?drop%5B0%5D=%7B%22addressLine1%22%3A%22Bc%20Ducorte%22%2C%22addressLine2%22%3A%22Rua%20Jo%C3%A3o%20Luiz%20Duarte%2C%20840%20-%20Bom%20Viver%20-%20Bigua%C3%A7u%20-%20SC%2C%2088160-640%22%2C%22id%22%3A%222d35b7ff-092c-2e5e-b2e7-6bb39285319a%22%2C%22source%22%3A%22SEARCH%22%2C%22latitude%22%3A-27.5320045%2C%22longitude%22%3A-48.6372049%2C%22provider%22%3A%22uber_places%22%7D&referrer=singular_click_id%3D1e3389ab-80c7-4a72-b59c-1ba190ab093c" target="_blank" class="action-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/><path d="M13 12h-2v5h2zM12 7c-.552 0-1 .449-1 1v1h2V8c0-.551-.448-1-1-1z"/></svg><span>Chamar no Uber</span></a><small>Um clique e o destino já estará no app. Sem digitar nada.</small></div>
+                    <div class="action-card"><a href="https://99app.com/open?drop_lat=-27.4933&drop_lng=-48.6541&drop_address=Barbearia%20BC%20Ducorte" target="_blank" class="action-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.316 2.012c-.22.001-.439.043-.653.125-4.522 1.543-6.421 6.538-4.88 11.06 1.139 3.345 3.991 5.768 7.375 6.435.133.027.266.046.398.058h.099c.148 0 .295-.018.44-.055 4.542-1.076 7.359-5.462 6.284-9.998-1.054-4.453-5.321-7.31-9.782-6.666a.8.8 0 0 1-.22-.001zm0 1.597c3.784-.002 6.945 2.503 7.828 6.138.878 3.606-1.503 7.15-5.118 8.028-3.15.748-6.237-1.01-7.258-3.924-1.282-3.66 1.058-7.796 4.908-8.868.204-.047.411-.07.618-.073.007 0 .013-.001.022-.001zm-3.834 2.859c-.218 0-.419.06-.589.176l-1.353.903c-.266.177-.348.536-.17.801l3.541 5.309c.178.266.536.347.801.17l1.353-.903c.266-.177.348-.536-.17-.801l-3.54-5.309a.784.784 0 0 0-.214-.246zm8.139.117c-.361 0-.654.293-.654.654v4.577c0 .361.293.654.654.654s.654-.293.654-.654V7.24c0-.362-.293-.655-.654-.655z"/></svg><span>Ir com 99 Táxi</span></a><small>Clique e vá direto com o endereço já preenchido.</small></div>
+                    <div class="action-card"><button id="copyAddressBtn" class="action-button"><svg id="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span id="copy-text">Copiar Endereço</span></button><small>Preferindo colar em outro app? Copie com um clique.</small></div>
+                </div>
+                <small class="location-description-mobile">Um clique e o destino já estará no app. Sem digitar nada.</small>
+            </div>
+        </div>
+    </section>
+
+    <button class="floating-appointment-btn animate" onclick="window.location.href='login pagina.html'"><span class="appointment-icon">✂️</span>Agendar</button>
+
+
+    <!-- Inclusão da Biblioteca Swiper.js (JS) -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+        // Scripts Gerais
+        // Modal removido - agora redireciona para login
+
+        function revealOnScroll() {
+            document.querySelectorAll('.animate').forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight * 0.95) { el.classList.add('visible'); } });
+        }
+        window.addEventListener('scroll', revealOnScroll);
+        document.addEventListener('DOMContentLoaded', revealOnScroll);
+
+        // Botão CTA agora redireciona diretamente para login
+        (function() {
+            const ctaButton = document.getElementById('ctaScheduleBtn');
+            if (!ctaButton) return;
+            
+            // Tooltip simples para desktop
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            if (!isTouchDevice) {
+                ctaButton.addEventListener('mouseenter', () => ctaButton.classList.add('show-tooltip'));
+                ctaButton.addEventListener('mouseleave', () => ctaButton.classList.remove('show-tooltip'));
+            }
+        })();
+
+        (function() {
+            const copyBtn = document.getElementById('copyAddressBtn');
+            if(!copyBtn) return;
+            const copyTextSpan = document.getElementById('copy-text');
+            const address = 'Barbearia BC Ducorte, R. João Marcondes de Mattos, 219 - Centro, Biguaçu - SC, 88160-222';
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(address).then(() => {
+                    const originalText = copyTextSpan.textContent;
+                    copyTextSpan.textContent = 'Endereço Copiado!';
+                    copyBtn.style.borderColor = '#1ED760'; copyBtn.style.color = '#1ED760';
+                    setTimeout(() => { copyTextSpan.textContent = originalText; copyBtn.style.borderColor = ''; copyBtn.style.color = ''; }, 2500);
+                }).catch(err => { console.error('Falha ao copiar endereço: ', err); });
+            });
+        })();
+    
+        // Script de Geolocalização
+        document.addEventListener('DOMContentLoaded', function() {
+            const locationHeader = document.getElementById('location-dynamic-header');
+            const storeLat = -27.5318916;
+            const storeLon = -48.6396959;
+            function toRadians(degree) { return degree * (Math.PI / 180); }
+            function calculateDistance(lat1, lon1, lat2, lon2) {
+                const R = 6371; const dLat = toRadians(lat2 - lat1); const dLon = toRadians(lon2 - lon1);
+                const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); return R * c;
+            }
+            const successCallback = (position) => {
+                const distance = calculateDistance(storeLat, storeLon, position.coords.latitude, position.coords.longitude);
+                locationHeader.innerHTML = `
+                    <button class="available-for-btn" type="button"><div class="circle"><div class="dot"></div><div class="outline"></div></div>
+                        Você está a ${distance.toFixed(1)} km do nosso local
+                    </button>
+                    <p class="location-subtitle">Calculamos a distância em tempo real para facilitar sua visita. Use os botões abaixo para obter a rota exata.</p>`;
+            };
+            const errorCallback = (error) => {
+                console.warn(`ERRO DE GEOLOCALIZAÇÃO (${error.code}): ${error.message}`);
+                locationHeader.innerHTML = `
+                    <h2 class="section-title">Estamos perto de você</h2>
+                    <p class="location-subtitle" style="margin-top:0;">Permita o acesso à sua localização para calcularmos a distância ou use os botões abaixo para ver o mapa.</p>`;
+            };
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(successCallback, errorCallback, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
+            } else {
+                locationHeader.innerHTML = `<p class="location-subtitle">Seu navegador não suporta geolocalização. Use os botões abaixo para encontrar a rota.</p>`;
+            }
+        });
+    </script>
+    
+    <script>
+        // Script Responsivo para o Carrossel
+        document.addEventListener('DOMContentLoaded', function () {
+            let swiperInstance = null;
+            const breakpoint = 768;
+
+            function initOrDestroySwiper() {
+                if (window.innerWidth <= breakpoint && swiperInstance === null) {
+                    swiperInstance = new Swiper('.barbers-grid.swiper', {
+                        slidesPerView: 1.2,
+                        centeredSlides: true,
+                        spaceBetween: 20,
+                        grabCursor: true,
+                        loop: true,
+                        autoplay: {
+                            delay: 3000,
+                            disableOnInteraction: false,
+                        },
+                        pagination: {
+                            el: '.swiper-pagination',
+                            clickable: true,
+                            dynamicBullets: true,
+                        },
+                        breakpoints: {
+                            320: {
+                                slidesPerView: 1.1,
+                                spaceBetween: 15,
+                            },
+                            480: {
+                                slidesPerView: 1.3,
+                                spaceBetween: 20,
+                            },
+                            768: {
+                                slidesPerView: 1.5,
+                                spaceBetween: 25,
+                            }
+                        }
+                    });
+                } else if (window.innerWidth > breakpoint && swiperInstance !== null) {
+                    swiperInstance.destroy(true, true);
+                    swiperInstance = null;
+                }
+            }
+            initOrDestroySwiper();
+            window.addEventListener('resize', initOrDestroySwiper);
+        });
+    </script>
+</body>
+</html>
