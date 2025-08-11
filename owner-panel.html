@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proprietário | BC Ducorte</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'background': '#F8F5F0',
+                        'text-primary': '#1A1A1A',
+                        'text-secondary': '#6B7280',
+                        'brand-accent': '#FF6B4E',
+                        'brand-dark': '#1A1A1A',
+                        'brand-gray': '#F3F4F6',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { -webkit-font-smoothing: antialiased; }
+        .card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .nav-item { transition: all 0.2s ease; }
+        .nav-item:hover { background-color: rgba(255,255,255,0.1); }
+        .chart-container { position: relative; height: 250px; }
+        .trend-up { color: #10B981; }
+        .trend-down { color: #EF4444; }
+    </style>
+</head>
+<body class="bg-background font-sans text-text-primary">
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar Minimalista -->
+        <aside class="w-64 bg-brand-dark text-white p-6 flex-col hidden md:flex">
+            <div class="mb-8">
+                <h1 class="text-2xl font-semibold">BC</h1>
+                <p class="text-xs text-gray-400 uppercase tracking-wider">Proprietário</p>
+            </div>
+            
+            <nav class="flex flex-col space-y-1">
+                <a href="#" class="nav-item flex items-center p-3 text-white bg-brand-accent rounded-lg">
+                    <i class="fa-solid fa-chart-line w-5 text-center"></i>
+                    <span class="ml-3 text-sm">Visão Geral</span>
+                </a>
+                <a href="#" class="nav-item flex items-center p-3 text-gray-300 rounded-lg">
+                    <i class="fa-solid fa-dollar-sign w-5 text-center"></i>
+                    <span class="ml-3 text-sm">Financeiro</span>
+                </a>
+                <a href="#" class="nav-item flex items-center p-3 text-gray-300 rounded-lg">
+                    <i class="fa-solid fa-users w-5 text-center"></i>
+                    <span class="ml-3 text-sm">Equipe</span>
+                </a>
+                <a href="#" class="nav-item flex items-center p-3 text-gray-300 rounded-lg">
+                    <i class="fa-solid fa-store w-5 text-center"></i>
+                    <span class="ml-3 text-sm">Filiais</span>
+                </a>
+            </nav>
+            
+            <div class="mt-auto">
+                <a href="admin-panel.html" class="nav-item flex items-center p-3 text-gray-400 rounded-lg">
+                    <i class="fa-solid fa-arrow-left w-5 text-center"></i>
+                    <span class="ml-3 text-sm">Admin</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8">
+            <div class="max-w-6xl mx-auto">
+                
+                <!-- Header Simples -->
+                <div class="mb-8">
+                    <h1 class="text-2xl font-semibold text-text-primary">Visão Geral</h1>
+                    <p class="text-text-secondary mt-1">Acompanhe o desempenho da sua barbearia</p>
+                </div>
+
+                <!-- Métricas Principais -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="card bg-white p-6 rounded-xl border border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-text-secondary text-sm">Receita</p>
+                                <p class="text-2xl font-semibold text-text-primary">R$ 45.280</p>
+                                <p class="text-sm trend-up"><i class="fa-solid fa-arrow-up mr-1"></i>+12.5%</p>
+                            </div>
+                            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-dollar-sign text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card bg-white p-6 rounded-xl border border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-text-secondary text-sm">Agendamentos</p>
+                                <p class="text-2xl font-semibold text-brand-accent">127</p>
+                                <p class="text-sm trend-up"><i class="fa-solid fa-arrow-up mr-1"></i>+8.3%</p>
+                            </div>
+                            <div class="w-10 h-10 bg-brand-accent/10 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-calendar text-brand-accent"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card bg-white p-6 rounded-xl border border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-text-secondary text-sm">Clientes</p>
+                                <p class="text-2xl font-semibold text-blue-600">1.847</p>
+                                <p class="text-sm trend-up"><i class="fa-solid fa-arrow-up mr-1"></i>+5.2%</p>
+                            </div>
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-users text-blue-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card bg-white p-6 rounded-xl border border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-text-secondary text-sm">Satisfação</p>
+                                <p class="text-2xl font-semibold text-yellow-600">4.8/5.0</p>
+                                <p class="text-sm trend-up"><i class="fa-solid fa-arrow-up mr-1"></i>+0.2</p>
+                            </div>
+                            <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-star text-yellow-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráficos Essenciais -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <!-- Gráfico de receita -->
+                    <div class="card bg-white p-6 rounded-xl border border-gray-100">
+                        <h3 class="font-medium text-text-primary mb-4">Receita Mensal</h3>
+                        <div class="chart-container">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Gráfico de agendamentos -->
+                    <div class="card bg-white p-6 rounded-xl border border-gray-100">
+                        <h3 class="font-medium text-text-primary mb-4">Agendamentos Semanais</h3>
+                        <div class="chart-container">
+                            <canvas id="bookingsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Desempenho por Filial -->
+                <div class="card bg-white p-6 rounded-xl border border-gray-100 mb-8">
+                    <h3 class="font-medium text-text-primary mb-4">Filiais</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-medium text-text-primary mb-3">Centro</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-text-secondary text-sm">Receita</span>
+                                    <span class="font-medium">R$ 28.450</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-text-secondary text-sm">Agendamentos</span>
+                                    <span class="font-medium">78</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium text-text-primary mb-3">Bom Viver</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-text-secondary text-sm">Receita</span>
+                                    <span class="font-medium">R$ 16.830</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-text-secondary text-sm">Agendamentos</span>
+                                    <span class="font-medium">49</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ações Rápidas -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="card bg-white p-6 rounded-xl border border-gray-100 text-center">
+                        <div class="w-12 h-12 mx-auto bg-brand-accent/10 rounded-full flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-file-invoice text-brand-accent text-xl"></i>
+                        </div>
+                        <h4 class="font-medium text-text-primary mb-2">Relatório</h4>
+                        <button class="bg-brand-accent text-white px-4 py-2 rounded-lg hover:bg-red-500 transition-colors text-sm">
+                            Gerar
+                        </button>
+                    </div>
+                    
+                    <div class="card bg-white p-6 rounded-xl border border-gray-100 text-center">
+                        <div class="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-users-cog text-blue-600 text-xl"></i>
+                        </div>
+                        <h4 class="font-medium text-text-primary mb-2">Equipe</h4>
+                        <a href="admin-panel.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm inline-block">
+                            Gerenciar
+                        </a>
+                    </div>
+                    
+                    <div class="card bg-white p-6 rounded-xl border border-gray-100 text-center">
+                        <div class="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-chart-pie text-green-600 text-xl"></i>
+                        </div>
+                        <h4 class="font-medium text-text-primary mb-2">Análise</h4>
+                        <button class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm">
+                            Analisar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Dados mockados simplificados
+        const businessData = {
+            revenue: [32000, 35000, 38000, 42000, 45000, 45280],
+            bookings: [45, 52, 48, 61, 58, 127],
+            months: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+            weekdays: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+            weekdayBookings: [18, 22, 25, 28, 35, 42, 15]
+        };
+
+        // Inicialização dos gráficos
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeCharts();
+        });
+
+        function initializeCharts() {
+            // Gráfico de receita
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: businessData.months,
+                    datasets: [{
+                        label: 'Receita (R$)',
+                        data: businessData.revenue,
+                        borderColor: '#FF6B4E',
+                        backgroundColor: 'rgba(255, 107, 78, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R$ ' + (value / 1000) + 'k';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de agendamentos
+            const bookingsCtx = document.getElementById('bookingsChart').getContext('2d');
+            new Chart(bookingsCtx, {
+                type: 'bar',
+                data: {
+                    labels: businessData.weekdays,
+                    datasets: [{
+                        label: 'Agendamentos',
+                        data: businessData.weekdayBookings,
+                        backgroundColor: '#3B82F6',
+                        borderColor: '#3B82F6',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+
+</body>
+</html> 

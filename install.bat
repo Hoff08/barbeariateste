@@ -29,14 +29,8 @@ echo Criando arquivo .env...
 if not exist .env (
     echo PORT=3000 > .env
     echo NODE_ENV=development >> .env
-    echo JWT_SECRET=sua_chave_jwt_super_secreta_aqui_mude_em_producao >> .env
-    echo JWT_REFRESH_SECRET=sua_chave_refresh_jwt_super_secreta_aqui_mude_em_producao >> .env
-    echo GOOGLE_CLIENT_ID=seu_google_client_id_aqui >> .env
-    echo GOOGLE_CLIENT_SECRET=seu_google_client_secret_aqui >> .env
-    echo APPLE_CLIENT_ID=com.barbearia.ducorte >> .env
-    echo APPLE_TEAM_ID=seu_apple_team_id_aqui >> .env
-    echo APPLE_KEY_ID=seu_apple_key_id_aqui >> .env
-    echo APPLE_PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\nsua_chave_privada_apple_aqui\n-----END PRIVATE KEY----- >> .env
+    echo JWT_SECRET=dev_jwt_secret_change_in_production >> .env
+    echo JWT_REFRESH_SECRET=dev_refresh_secret_change_in_production >> .env
     echo DATABASE_URL=./database.sqlite >> .env
     echo RATE_LIMIT_WINDOW_MS=900000 >> .env
     echo RATE_LIMIT_MAX_REQUESTS=100 >> .env

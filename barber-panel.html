@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbeiro | BC Ducorte</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'background': '#F8F5F0',
+                        'text-primary': '#1A1A1A',
+                        'text-secondary': '#6B7280',
+                        'brand-accent': '#FF6B4E',
+                        'brand-dark': '#1A1A1A',
+                        'brand-gray': '#F3F4F6',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { -webkit-font-smoothing: antialiased; }
+        .calendar-grid { display: grid; grid-template-columns: 100px repeat(5, 1fr); }
+        .time-slot { min-height: 70px; border-bottom: 1px solid #e5e7eb; }
+        .appointment-block { 
+            background: #1f2937; 
+            color: white; 
+            padding: 6px; 
+            border-radius: 6px; 
+            margin: 1px; 
+            font-size: 11px; 
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .appointment-block:hover { transform: scale(1.02); }
+        .appointment-block.selected { border: 2px solid #3b82f6; }
+        
+        .professional-tab { 
+            padding: 6px 12px; 
+            border-radius: 16px; 
+            cursor: pointer; 
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            font-size: 13px;
+        }
+        .professional-tab.active { 
+            background: #FF6B4E; 
+            color: white; 
+            border-color: #FF6B4E;
+        }
+        .professional-tab:not(.active) { 
+            background: #f3f4f6; 
+            color: #374151;
+        }
+        .professional-tab:not(.active):hover { background: #e5e7eb; }
+
+        .action-button { 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            transition: all 0.2s ease;
+            border: 2px solid #e5e7eb;
+        }
+        .action-button:hover { transform: scale(1.1); border-color: #FF6B4E; }
+    </style>
+</head>
+<body class="bg-background font-sans text-text-primary">
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar Minimalista -->
+        <aside class="w-64 bg-brand-dark text-white p-6 flex-col hidden md:flex">
+            <div class="mb-8">
+                <h1 class="text-2xl font-semibold">BC</h1>
+                <p class="text-xs text-gray-400 uppercase tracking-wider">Barbeiro</p>
+            </div>
+            
+            <nav class="flex flex-col space-y-1">
+                <a href="#" class="flex items-center p-3 text-white bg-brand-accent rounded-lg">
+                    <i class="fa-solid fa-calendar-day w-5 text-center"></i>
+                    <span class="ml-3 text-sm">Calendário</span>
+                </a>
+                <a href="#" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-white/10">
+                    <i class="fa-solid fa-clock w-5 text-center"></i>
+                    <span class="ml-3 text-sm">Horários</span>
+                </a>
+                <a href="#" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-white/10">
+                    <i class="fa-solid fa-user-friends w-5 text-center"></i>
+                    <span class="ml-3 text-sm">Clientes</span>
+                </a>
+            </nav>
+            
+            <div class="mt-auto">
+                <a href="admin-panel.html" class="flex items-center p-3 text-gray-400 rounded-lg hover:bg-white/10">
+                    <i class="fa-solid fa-arrow-left w-5 text-center"></i>
+                    <span class="ml-3 text-sm">Admin</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8">
+            <div class="max-w-6xl mx-auto">
+                
+                <!-- Header Simples -->
+                <div class="mb-6">
+                    <h1 class="text-2xl font-semibold text-text-primary">Calendário</h1>
+                    <p class="text-text-secondary mt-1">Gerencie sua agenda</p>
+                </div>
+
+                <!-- Seleção de Profissionais -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-3 overflow-x-auto pb-2">
+                        <div class="professional-tab active" data-professional="cristofer">
+                            <span>Cristofer</span>
+                        </div>
+                        <div class="professional-tab" data-professional="diego">
+                            <span>Diego</span>
+                        </div>
+                        <div class="professional-tab" data-professional="mike">
+                            <span>Mike</span>
+                        </div>
+                        <div class="professional-tab" data-professional="jake">
+                            <span>Jake</span>
+                        </div>
+                        <div class="professional-tab" data-professional="fred">
+                            <span>Fred</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendário e Detalhes -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Calendário Semanal -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                            <!-- Cabeçalho do Calendário -->
+                            <div class="bg-gray-50 p-4 border-b border-gray-100">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="font-medium text-text-primary" id="current-date">20 - 24 Janeiro</h3>
+                                        <p class="text-sm text-text-secondary" id="current-time">9:41 Seg Jun 3</p>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button id="prev-week" class="p-2 hover:bg-gray-200 rounded-lg">
+                                            <i class="fa-solid fa-chevron-left"></i>
+                                        </button>
+                                        <button id="next-week" class="p-2 hover:bg-gray-200 rounded-lg">
+                                            <i class="fa-solid fa-chevron-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Grade do Calendário -->
+                            <div class="overflow-x-auto">
+                                <div class="calendar-grid min-w-[700px]">
+                                    <!-- Cabeçalho com horários -->
+                                    <div class="bg-gray-50 p-3 font-medium text-text-primary text-sm text-center">Hora</div>
+                                    <div class="bg-gray-50 p-3 font-medium text-text-primary text-sm text-center">Seg</div>
+                                    <div class="bg-gray-50 p-3 font-medium text-text-primary text-sm text-center">Ter</div>
+                                    <div class="bg-gray-50 p-3 font-medium text-text-primary text-sm text-center">Qua</div>
+                                    <div class="bg-gray-50 p-3 font-medium text-text-primary text-sm text-center">Qui</div>
+                                    <div class="bg-gray-50 p-3 font-medium text-text-primary text-sm text-center">Sex</div>
+
+                                    <!-- Linhas de horários -->
+                                    <div class="time-slot p-2 text-sm text-text-secondary text-center">10:00</div>
+                                    <div class="time-slot p-2" id="monday-10"></div>
+                                    <div class="time-slot p-2" id="tuesday-10"></div>
+                                    <div class="time-slot p-2" id="wednesday-10"></div>
+                                    <div class="time-slot p-2" id="thursday-10"></div>
+                                    <div class="time-slot p-2" id="friday-10"></div>
+
+                                    <div class="time-slot p-2 text-sm text-text-secondary text-center">11:00</div>
+                                    <div class="time-slot p-2" id="monday-11"></div>
+                                    <div class="time-slot p-2" id="tuesday-11"></div>
+                                    <div class="time-slot p-2" id="wednesday-11"></div>
+                                    <div class="time-slot p-2" id="thursday-11"></div>
+                                    <div class="time-slot p-2" id="friday-11"></div>
+
+                                    <div class="time-slot p-2 text-sm text-text-secondary text-center">12:00</div>
+                                    <div class="time-slot p-2" id="monday-12"></div>
+                                    <div class="time-slot p-2" id="tuesday-12"></div>
+                                    <div class="time-slot p-2" id="wednesday-12"></div>
+                                    <div class="time-slot p-2" id="thursday-12"></div>
+                                    <div class="time-slot p-2" id="friday-12"></div>
+
+                                    <div class="time-slot p-2 text-sm text-text-secondary text-center">13:00</div>
+                                    <div class="time-slot p-2" id="monday-13"></div>
+                                    <div class="time-slot p-2" id="tuesday-13"></div>
+                                    <div class="time-slot p-2" id="wednesday-13"></div>
+                                    <div class="time-slot p-2" id="thursday-13"></div>
+                                    <div class="time-slot p-2" id="friday-13"></div>
+
+                                    <div class="time-slot p-2 text-sm text-text-secondary text-center">14:00</div>
+                                    <div class="time-slot p-2" id="monday-14"></div>
+                                    <div class="time-slot p-2" id="tuesday-14"></div>
+                                    <div class="time-slot p-2" id="wednesday-14"></div>
+                                    <div class="time-slot p-2" id="thursday-14"></div>
+                                    <div class="time-slot p-2" id="friday-14"></div>
+
+                                    <div class="time-slot p-2 text-sm text-text-secondary text-center">15:00</div>
+                                    <div class="time-slot p-2" id="monday-15"></div>
+                                    <div class="time-slot p-2" id="tuesday-15"></div>
+                                    <div class="time-slot p-2" id="wednesday-15"></div>
+                                    <div class="time-slot p-2" id="thursday-15"></div>
+                                    <div class="time-slot p-2" id="friday-15"></div>
+
+                                    <div class="time-slot p-2 text-sm text-text-secondary text-center">16:00</div>
+                                    <div class="time-slot p-2" id="monday-16"></div>
+                                    <div class="time-slot p-2" id="tuesday-16"></div>
+                                    <div class="time-slot p-2" id="wednesday-16"></div>
+                                    <div class="time-slot p-2" id="thursday-16"></div>
+                                    <div class="time-slot p-2" id="friday-16"></div>
+
+                                    <div class="time-slot p-2 text-sm text-text-secondary text-center">17:00</div>
+                                    <div class="time-slot p-2" id="monday-17"></div>
+                                    <div class="time-slot p-2" id="tuesday-17"></div>
+                                    <div class="time-slot p-2" id="wednesday-17"></div>
+                                    <div class="time-slot p-2" id="thursday-17"></div>
+                                    <div class="time-slot p-2" id="friday-17"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Painel de Detalhes -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-white rounded-xl border border-gray-100 p-6">
+                            <div id="appointment-details" class="text-center">
+                                <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fa-solid fa-calendar text-2xl text-gray-400"></i>
+                                </div>
+                                <h3 class="font-medium text-text-primary mb-2">Selecione um Agendamento</h3>
+                                <p class="text-text-secondary text-sm">Clique no calendário</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Dados mockados simplificados
+        let appointments = [
+            {
+                id: 1,
+                clientName: "João Silva",
+                service: "Signature Cut",
+                date: "2024-01-22",
+                time: "10:00",
+                duration: 60,
+                status: "confirmed",
+                price: 75.00,
+                notes: "Cliente fiel, sempre pontual.",
+                professional: "cristofer"
+            },
+            {
+                id: 2,
+                clientName: "Pedro Santos",
+                service: "Haircut",
+                date: "2024-01-22",
+                time: "14:00",
+                duration: 45,
+                status: "confirmed",
+                price: 45.00,
+                notes: "Prefere cortes modernos",
+                professional: "cristofer"
+            },
+            {
+                id: 3,
+                clientName: "Carlos Oliveira",
+                service: "Beard Trim",
+                date: "2024-01-23",
+                time: "11:00",
+                duration: 30,
+                status: "pending",
+                price: 30.00,
+                notes: "Primeira visita",
+                professional: "cristofer"
+            },
+            {
+                id: 4,
+                clientName: "Fred Sommers",
+                service: "Signature Cut",
+                date: "2024-01-24",
+                time: "11:15",
+                duration: 90,
+                status: "confirmed",
+                price: 75.00,
+                notes: "Este agendamento é para o casamento do melhor amigo de Ben. Fred geralmente pede um 1 nas laterais e para misturar e aparar o topo.",
+                professional: "cristofer"
+            }
+        ];
+
+        let currentWeek = new Date();
+        let selectedProfessional = 'cristofer';
+        let selectedAppointment = null;
+
+        // Elementos DOM
+        const elements = {
+            currentDate: document.getElementById('current-date'),
+            currentTime: document.getElementById('current-time'),
+            prevWeek: document.getElementById('prev-week'),
+            nextWeek: document.getElementById('next-week'),
+            appointmentDetails: document.getElementById('appointment-details')
+        };
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeEventListeners();
+            updateCurrentTime();
+            renderCalendar();
+            setInterval(updateCurrentTime, 60000);
+        });
+
+        function initializeEventListeners() {
+            // Seleção de profissionais
+            document.querySelectorAll('.professional-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.professional-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    selectedProfessional = tab.dataset.professional;
+                    renderCalendar();
+                });
+            });
+
+            // Navegação da semana
+            elements.prevWeek.addEventListener('click', () => {
+                currentWeek.setDate(currentWeek.getDate() - 7);
+                renderCalendar();
+            });
+
+            elements.nextWeek.addEventListener('click', () => {
+                currentWeek.setDate(currentWeek.getDate() + 7);
+                renderCalendar();
+            });
+        }
+
+        function updateCurrentTime() {
+            const now = new Date();
+            const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+            
+            elements.currentTime.textContent = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')} ${days[now.getDay()]} ${months[now.getMonth()]} ${now.getDate()}`;
+        }
+
+        function renderCalendar() {
+            // Limpar calendário
+            document.querySelectorAll('[id$="-10"], [id$="-11"], [id$="-12"], [id$="-13"], [id$="-14"], [id$="-15"], [id$="-16"], [id$="-17"]').forEach(cell => {
+                cell.innerHTML = '';
+            });
+
+            // Calcular início da semana
+            const weekStart = new Date(currentWeek);
+            weekStart.setDate(currentWeek.getDate() - currentWeek.getDay() + 1);
+
+            // Atualizar cabeçalho da data
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 4);
+            elements.currentDate.textContent = `${weekStart.getDate()} - ${weekEnd.getDate()} ${getMonthName(weekStart.getMonth())}`;
+
+            // Renderizar agendamentos
+            appointments.forEach(appointment => {
+                if (appointment.professional === selectedProfessional) {
+                    const appointmentDate = new Date(appointment.date);
+                    const dayOfWeek = appointmentDate.getDay();
+                    const time = appointment.time;
+                    
+                    if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+                        const dayNames = ['', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+                        const cellId = `${dayNames[dayOfWeek]}-${time.split(':')[0]}`;
+                        const cell = document.getElementById(cellId);
+                        
+                        if (cell) {
+                            const appointmentBlock = createAppointmentBlock(appointment);
+                            cell.appendChild(appointmentBlock);
+                        }
+                    }
+                }
+            });
+        }
+
+        function createAppointmentBlock(appointment) {
+            const block = document.createElement('div');
+            block.className = 'appointment-block';
+            block.onclick = () => selectAppointment(appointment);
+            
+            const duration = appointment.duration;
+            const height = Math.max(50, (duration / 60) * 50);
+            block.style.height = `${height}px`;
+            
+            block.innerHTML = `
+                <div class="font-medium text-xs">${appointment.clientName}</div>
+                <div class="text-xs opacity-90">${appointment.service}</div>
+                <div class="text-xs opacity-75">${appointment.time}</div>
+            `;
+            
+            return block;
+        }
+
+        function selectAppointment(appointment) {
+            selectedAppointment = appointment;
+            
+            // Remover seleção anterior
+            document.querySelectorAll('.appointment-block').forEach(block => {
+                block.classList.remove('selected');
+            });
+            
+            // Adicionar seleção ao bloco clicado
+            event.target.closest('.appointment-block').classList.add('selected');
+            
+            // Renderizar detalhes
+            renderAppointmentDetails(appointment);
+        }
+
+        function renderAppointmentDetails(appointment) {
+            const details = document.getElementById('appointment-details');
+            details.innerHTML = `
+                <div class="text-left">
+                    <!-- Cliente -->
+                    <div class="text-center mb-4">
+                        <div class="w-16 h-16 mx-auto bg-gray-200 rounded-full flex items-center justify-center mb-2">
+                            <i class="fa-solid fa-user text-xl text-gray-400"></i>
+                        </div>
+                        <h3 class="font-medium text-text-primary">${appointment.clientName}</h3>
+                    </div>
+                    
+                    <!-- Informações -->
+                    <div class="space-y-3 mb-6">
+                        <div class="text-sm">
+                            <span class="text-text-secondary">${new Date(appointment.date).toLocaleDateString('pt-BR')}, ${appointment.time}</span>
+                        </div>
+                        <div class="text-sm">
+                            <span class="font-medium">${appointment.service}</span>
+                        </div>
+                        <div class="text-sm text-text-secondary">
+                            <span>R$ ${appointment.price.toFixed(2)}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Notas -->
+                    ${appointment.notes ? `
+                    <div class="mb-6">
+                        <div class="text-sm text-text-secondary">
+                            <p>${appointment.notes}</p>
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <!-- Botões de Ação -->
+                    <div class="flex justify-center gap-2 mb-4">
+                        <div class="action-button" title="Cancelar">
+                            <i class="fa-solid fa-times text-red-500 text-sm"></i>
+                        </div>
+                        <div class="action-button" title="Adicionar">
+                            <i class="fa-solid fa-plus text-brand-accent text-sm"></i>
+                        </div>
+                        <div class="action-button" title="Produtos">
+                            <i class="fa-solid fa-shopping-cart text-brand-accent text-sm"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Botão de Cobrança -->
+                    <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">
+                        Cobrar R$ ${appointment.price.toFixed(2)}
+                    </button>
+                </div>
+            `;
+        }
+
+        function getMonthName(month) {
+            const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+            return months[month];
+        }
+    </script>
+
+</body>
+</html> 

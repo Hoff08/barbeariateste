@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | BC Ducorte</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'background': '#F8F5F0',
+                        'text-primary': '#1A1A1A',
+                        'text-secondary': '#6B7280',
+                        'brand-accent': '#FF6B4E',
+                        'brand-dark': '#1A1A1A',
+                        'brand-gray': '#F3F4F6',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { -webkit-font-smoothing: antialiased; }
+        .card { transition: all 0.2s ease; }
+        .card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .nav-item { transition: all 0.2s ease; }
+        .nav-item:hover { background-color: rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body class="bg-background font-sans text-text-primary">
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar Minimalista -->
+        <aside class="w-64 bg-brand-dark text-white p-6 flex-col hidden md:flex">
+            <div class="mb-8">
+                <h1 class="text-2xl font-semibold">BC</h1>
+                <p class="text-xs text-gray-400 uppercase tracking-wider">Admin</p>
+            </div>
+            
+            <nav class="flex flex-col space-y-1">
+                <a href="#" class="nav-item flex items-center p-3 text-white bg-brand-accent rounded-lg">
+                    <i class="fa-solid fa-users w-5 text-center"></i>
+                    <span class="ml-3 text-sm">Profissionais</span>
+                </a>
+                <a href="clients-panel.html" class="nav-item flex items-center p-3 text-gray-300 rounded-lg">
+                    <i class="fa-solid fa-user-friends w-5 text-center"></i>
+                    <span class="ml-3 text-sm">Clientes</span>
+                </a>
+                <a href="barber-panel.html" class="nav-item flex items-center p-3 text-gray-300 rounded-lg">
+                    <i class="fa-solid fa-cut w-5 text-center"></i>
+                    <span class="ml-3 text-sm">Barbeiros</span>
+                </a>
+                <a href="owner-panel.html" class="nav-item flex items-center p-3 text-gray-300 rounded-lg">
+                    <i class="fa-solid fa-chart-line w-5 text-center"></i>
+                    <span class="ml-3 text-sm">Proprietário</span>
+                </a>
+            </nav>
+            
+            <div class="mt-auto">
+                <a href="dashboard.html" class="nav-item flex items-center p-3 text-gray-400 rounded-lg">
+                    <i class="fa-solid fa-arrow-left w-5 text-center"></i>
+                    <span class="ml-3 text-sm">Dashboard</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8">
+            <div class="max-w-4xl mx-auto">
+                
+                <!-- Header Simples -->
+                <div class="mb-8">
+                    <h1 class="text-2xl font-semibold text-text-primary">Gestão de Profissionais</h1>
+                    <p class="text-text-secondary mt-1">Gerencie sua equipe</p>
+                </div>
+
+                <!-- Estatísticas Essenciais -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="card bg-white p-6 rounded-xl border border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-text-secondary text-sm">Total</p>
+                                <p class="text-2xl font-semibold text-text-primary" id="total-professionals">0</p>
+                            </div>
+                            <div class="w-10 h-10 bg-brand-accent/10 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-users text-brand-accent"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card bg-white p-6 rounded-xl border border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-text-secondary text-sm">Ativos</p>
+                                <p class="text-2xl font-semibold text-green-600" id="active-professionals">0</p>
+                            </div>
+                            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-check text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card bg-white p-6 rounded-xl border border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-text-secondary text-sm">Hoje</p>
+                                <p class="text-2xl font-semibold text-brand-accent" id="today-appointments">0</p>
+                            </div>
+                            <div class="w-10 h-10 bg-brand-accent/10 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-calendar text-brand-accent"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ações Principais -->
+                <div class="flex justify-between items-center mb-6">
+                    <div class="relative">
+                        <input type="text" id="search-input" placeholder="Buscar..." 
+                               class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent w-64">
+                        <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    
+                    <button id="add-professional-btn" class="bg-brand-accent text-white px-6 py-2 rounded-lg hover:bg-red-500 transition-colors">
+                        <i class="fa-solid fa-plus mr-2"></i>Novo
+                    </button>
+                </div>
+
+                <!-- Tabela Simplificada -->
+                <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="text-left p-4 font-medium text-text-primary text-sm">Profissional</th>
+                                <th class="text-left p-4 font-medium text-text-primary text-sm">Especialidade</th>
+                                <th class="text-left p-4 font-medium text-text-primary text-sm">Status</th>
+                                <th class="text-left p-4 font-medium text-text-primary text-sm">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="professionals-table-body">
+                            <!-- Dados dinâmicos -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Simplificado -->
+    <div id="professional-modal" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold" id="modal-title">Novo Profissional</h2>
+                <button id="close-modal" class="text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+
+            <form id="professional-form" class="space-y-4">
+                <input type="hidden" id="professional-id" name="id">
+                
+                <div>
+                    <label for="name" class="block text-sm font-medium text-text-primary mb-2">Nome</label>
+                    <input type="text" id="name" name="name" required
+                           class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label for="specialty" class="block text-sm font-medium text-text-primary mb-2">Especialidade</label>
+                    <select id="specialty" name="specialty" required
+                            class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent">
+                        <option value="">Selecione...</option>
+                        <option value="Corte">Corte</option>
+                        <option value="Barba">Barba</option>
+                        <option value="Corte + Barba">Corte + Barba</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="status" class="block text-sm font-medium text-text-primary mb-2">Status</label>
+                    <select id="status" name="status" required
+                            class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent">
+                        <option value="active">Ativo</option>
+                        <option value="inactive">Inativo</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4">
+                    <button type="button" id="cancel-btn" class="px-4 py-2 border border-gray-200 rounded-lg text-text-secondary hover:bg-gray-50">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-brand-accent text-white rounded-lg hover:bg-red-500 transition-colors">
+                        Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Dados mockados simplificados
+        let professionals = [
+            { id: 1, name: "Cristofer Silva", specialty: "Corte + Barba", status: "active" },
+            { id: 2, name: "Diego Soares", specialty: "Corte", status: "active" },
+            { id: 3, name: "João Pedro", specialty: "Barba", status: "inactive" }
+        ];
+
+        let filteredProfessionals = [...professionals];
+
+        // Elementos DOM
+        const elements = {
+            modal: document.getElementById('professional-modal'),
+            form: document.getElementById('professional-form'),
+            addBtn: document.getElementById('add-professional-btn'),
+            closeBtn: document.getElementById('close-modal'),
+            cancelBtn: document.getElementById('cancel-btn'),
+            searchInput: document.getElementById('search-input'),
+            tableBody: document.getElementById('professionals-table-body'),
+            totalProfessionals: document.getElementById('total-professionals'),
+            activeProfessionals: document.getElementById('active-professionals'),
+            todayAppointments: document.getElementById('today-appointments')
+        };
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeEventListeners();
+            updateDashboard();
+            renderTable();
+        });
+
+        function initializeEventListeners() {
+            elements.addBtn.addEventListener('click', () => openModal());
+            elements.closeBtn.addEventListener('click', closeModal);
+            elements.cancelBtn.addEventListener('click', closeModal);
+            elements.modal.addEventListener('click', (e) => {
+                if (e.target === elements.modal) closeModal();
+            });
+            elements.form.addEventListener('submit', handleFormSubmit);
+            elements.searchInput.addEventListener('input', handleSearch);
+        }
+
+        function openModal(professional = null) {
+            if (professional) {
+                fillFormWithData(professional);
+                document.getElementById('modal-title').textContent = 'Editar Profissional';
+            } else {
+                elements.form.reset();
+                document.getElementById('professional-id').value = '';
+                document.getElementById('modal-title').textContent = 'Novo Profissional';
+            }
+            elements.modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            elements.modal.classList.add('hidden');
+            elements.form.reset();
+        }
+
+        function fillFormWithData(professional) {
+            document.getElementById('professional-id').value = professional.id;
+            document.getElementById('name').value = professional.name;
+            document.getElementById('specialty').value = professional.specialty;
+            document.getElementById('status').value = professional.status;
+        }
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(elements.form);
+            const professionalData = Object.fromEntries(formData.entries());
+            
+            if (professionalData.id) {
+                const index = professionals.findIndex(p => p.id == professionalData.id);
+                if (index !== -1) {
+                    professionals[index] = { ...professionals[index], ...professionalData };
+                }
+            } else {
+                const newProfessional = { ...professionalData, id: Date.now() };
+                professionals.push(newProfessional);
+            }
+            
+            updateDashboard();
+            renderTable();
+            closeModal();
+        }
+
+        function handleSearch() {
+            const searchTerm = elements.searchInput.value.toLowerCase();
+            filteredProfessionals = professionals.filter(professional => 
+                professional.name.toLowerCase().includes(searchTerm) ||
+                professional.specialty.toLowerCase().includes(searchTerm)
+            );
+            renderTable();
+        }
+
+        function renderTable() {
+            elements.tableBody.innerHTML = filteredProfessionals.map(professional => `
+                <tr class="border-b border-gray-100">
+                    <td class="p-4">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-brand-accent/10 rounded-full flex items-center justify-center mr-3">
+                                <i class="fa-solid fa-user text-brand-accent text-sm"></i>
+                            </div>
+                            <span class="font-medium">${professional.name}</span>
+                        </div>
+                    </td>
+                    <td class="p-4 text-text-secondary">${professional.specialty}</td>
+                    <td class="p-4">
+                        <span class="px-2 py-1 rounded-full text-xs font-medium ${
+                            professional.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        }">
+                            ${professional.status === 'active' ? 'Ativo' : 'Inativo'}
+                        </span>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex gap-2">
+                            <button onclick="editProfessional(${professional.id})" 
+                                    class="p-2 text-brand-accent hover:bg-brand-accent/10 rounded-lg">
+                                <i class="fa-solid fa-edit"></i>
+                            </button>
+                            <button onclick="deleteProfessional(${professional.id})" 
+                                    class="p-2 text-red-600 hover:bg-red-100 rounded-lg">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function editProfessional(id) {
+            const professional = professionals.find(p => p.id === id);
+            if (professional) openModal(professional);
+        }
+
+        function deleteProfessional(id) {
+            if (confirm('Excluir este profissional?')) {
+                professionals = professionals.filter(p => p.id !== id);
+                updateDashboard();
+                renderTable();
+            }
+        }
+
+        function updateDashboard() {
+            elements.totalProfessionals.textContent = professionals.length;
+            elements.activeProfessionals.textContent = professionals.filter(p => p.status === 'active').length;
+            elements.todayAppointments.textContent = Math.floor(Math.random() * 20) + 10; // Mock
+        }
+    </script>
+
+</body>
+</html> 

@@ -22,16 +22,23 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    // Paleta de cores combinada para ambos os layouts
+                    // Paleta de cores da landing page
                     colors: {
-                        // Cores do Dashboard
-                        'background': '#F5F3EF',
-                        'text-primary': '#111827',
-                        'text-secondary': '#6B7280',
-                        // Cores do Agendamento
-                        'brand-yellow': '#D6A329',
-                        'brand-dark': '#202020',
+                        // Background principal - Light Cream/Off-white
+                        'background': '#F8F5F0',
+                        // Texto principal - Dark Charcoal Grey
+                        'text-primary': '#1A1A1A',
+                        // Texto secundário - Medium Grey
+                        'text-secondary': '#555555',
+                        // Cor de destaque - Vibrant Reddish-Orange
+                        'brand-accent': '#FF6B4E',
+                        // Cor de fundo escura para botões
+                        'brand-dark': '#1A1A1A',
+                        // Cor dourada suave para ícones e destaques
+                        'brand-gold': '#FFC107',
+                        // Cinza escuro para elementos secundários
                         'brand-gray-dark': '#2B2B2B',
+                        // Cinza claro para elementos terciários
                         'brand-gray-light': '#3C3C3C',
                     },
                     // Fontes personalizadas
@@ -86,6 +93,9 @@
                 <a href="#" class="flex items-center p-3 text-text-secondary hover:bg-gray-200/60 rounded-lg">
                     <i class="fa-solid fa-star w-6 text-center"></i><span class="ml-4">Clube do assinante</span>
                 </a>
+                <a href="admin-panel.html" class="flex items-center p-3 text-text-secondary hover:bg-gray-200/60 rounded-lg">
+                    <i class="fa-solid fa-users-cog w-6 text-center"></i><span class="ml-4">Administração</span>
+                </a>
             </nav>
             <div>
                  <a href="#" id="logout-btn" class="flex items-center p-3 text-text-secondary hover:bg-gray-200/60 rounded-lg">
@@ -105,18 +115,18 @@
                     <div class="bg-white p-6 rounded-lg border border-gray-200 mb-8">
                         <h2 class="font-serif text-lg font-semibold text-text-primary mb-1">Seu plano</h2>
                         <p class="text-text-secondary mb-4">Você ainda não assinou um plano. Contrate e aproveite os benefícios.</p>
-                        <a href="#" class="font-semibold text-text-primary hover:text-black group">Contrate um plano <i class="fa-solid fa-arrow-right text-xs ml-1 transition-transform group-hover:translate-x-1"></i></a>
+                        <a href="#" class="font-semibold text-brand-accent hover:text-red-500 group">Contrate um plano <i class="fa-solid fa-arrow-right text-xs ml-1 transition-transform group-hover:translate-x-1"></i></a>
                     </div>
-                    <div class="bg-black text-white p-6 rounded-lg flex justify-between items-center mb-12">
+                    <div class="bg-brand-dark text-white p-6 rounded-lg flex justify-between items-center mb-12">
                         <div>
                             <h3 class="font-serif text-lg font-semibold">Conheça o Clube do assinante</h3>
                             <p class="text-gray-300 text-sm">e pague seu cupom com vantagens</p>
                         </div>
-                        <a href="#" class="bg-gray-800 h-10 w-10 flex items-center justify-center rounded-full hover:bg-gray-700 transition-colors"><i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="#" class="bg-brand-gray-dark h-10 w-10 flex items-center justify-center rounded-full hover:bg-brand-gray-light transition-colors"><i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="font-serif text-xl font-semibold text-text-primary">Próximos agendamentos</h2>
-                        <a href="#" class="font-semibold text-sm text-text-secondary hover:text-text-primary">Ver tudo</a>
+                        <a href="#" class="font-semibold text-sm text-brand-accent hover:text-red-500">Ver tudo</a>
                     </div>
                     <div class="appointments-list">
                         <!-- Os agendamentos serão carregados dinamicamente aqui -->
@@ -124,7 +134,7 @@
                     
                     <!-- Botão de novo agendamento -->
                     <div class="text-center mt-6">
-                        <button id="show-booking-button" class="bg-black text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors">
+                        <button id="show-booking-button" class="bg-brand-accent text-white font-semibold py-3 px-6 rounded-lg hover:bg-red-500 transition-colors">
                             <i class="fa-solid fa-plus mr-2"></i>Novo agendamento
                         </button>
                     </div>
@@ -136,43 +146,43 @@
             <!-- ========= PÁGINA 2: AGENDAMENTO (ESCONDIDA INICIALMENTE) ========= -->
             <div id="booking-view" class="bg-brand-dark text-white h-full hidden">
                 <div class="container mx-auto p-4 sm:p-6 max-w-lg">
-                    <button id="back-to-dashboard-button" class="mb-4 text-brand-yellow hover:text-yellow-300">
+                    <button id="back-to-dashboard-button" class="mb-4 text-brand-accent hover:text-yellow-300">
                         <i class="fas fa-arrow-left mr-2"></i>Voltar ao Painel
                     </button>
                     <div id="progress-header" class="mb-8">
                         <h1 class="text-2xl font-bold mb-4 text-center">Novo Agendamento</h1>
                         <div class="w-full bg-brand-gray-dark rounded-full h-2">
-                            <div id="progress-bar" class="bg-brand-yellow h-2 rounded-full progress-bar-fill" style="width: 0%;"></div>
+                            <div id="progress-bar" class="bg-brand-gold h-2 rounded-full progress-bar-fill" style="width: 0%;"></div>
                         </div>
                     </div>
                     <main id="summary-view" class="space-y-3">
                          <button id="open-filial-modal" class="summary-button w-full bg-brand-gray-dark p-4 rounded-lg flex items-center justify-between text-left transition-opacity">
-                            <div class="flex items-center"><i class="fas fa-store fa-lg w-8 text-center text-brand-yellow"></i><p>Filial</p></div>
+                            <div class="flex items-center"><i class="fas fa-store fa-lg w-8 text-center text-brand-gold"></i><p>Filial</p></div>
                             <span id="selected-filial" class="font-bold text-gray-300">Selecione</span>
                         </button>
                          <button id="open-professional-modal" class="summary-button w-full bg-brand-gray-dark p-4 rounded-lg flex items-center justify-between text-left transition-opacity" disabled>
-                            <div class="flex items-center"><i class="fas fa-user-friends fa-lg w-8 text-center text-brand-yellow"></i><p>Profissional</p></div>
+                            <div class="flex items-center"><i class="fas fa-user-friends fa-lg w-8 text-center text-brand-gold"></i><p>Profissional</p></div>
                             <span id="selected-professional" class="font-bold text-gray-300">Selecione</span>
                         </button>
                          <button id="open-service-modal" class="summary-button w-full bg-brand-gray-dark p-4 rounded-lg flex items-center justify-between text-left transition-opacity" disabled>
-                            <div class="flex items-center"><i class="fas fa-cut fa-lg w-8 text-center text-brand-yellow"></i><p>Serviço</p></div>
+                            <div class="flex items-center"><i class="fas fa-cut fa-lg w-8 text-center text-brand-gold"></i><p>Serviço</p></div>
                             <span id="selected-service" class="font-bold text-gray-300">Selecione</span>
                         </button>
                          <button id="open-datetime-modal" class="summary-button w-full bg-brand-gray-dark p-4 rounded-lg flex items-center justify-between text-left transition-opacity" disabled>
-                            <div class="flex items-center"><i class="fas fa-calendar-alt fa-lg w-8 text-center text-brand-yellow"></i><p>Data e Hora</p></div>
+                            <div class="flex items-center"><i class="fas fa-calendar-alt fa-lg w-8 text-center text-brand-gold"></i><p>Data e Hora</p></div>
                             <span id="selected-datetime" class="font-bold text-gray-300">Selecione</span>
                         </button>
                         <div class="pt-6">
-                            <button id="confirm-booking-button" class="w-full bg-brand-yellow text-brand-dark font-bold p-4 rounded-lg transition-all" disabled>Confirmar Agendamento</button>
+                            <button id="confirm-booking-button" class="w-full bg-brand-gold text-brand-dark font-bold p-4 rounded-lg transition-all" disabled>Confirmar Agendamento</button>
                         </div>
                     </main>
                     <section id="success-screen" class="hidden text-center py-10">
                         <div class="mb-4">
-                            <svg class="animate-bounce mx-auto w-16 h-16 text-brand-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <svg class="animate-bounce mx-auto w-16 h-16 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
-                        <h2 class="text-2xl font-bold text-brand-yellow mb-2">Agendamento Confirmado!</h2>
+                        <h2 class="text-2xl font-bold text-brand-gold mb-2">Agendamento Confirmado!</h2>
                         <p class="text-gray-300" id="success-summary"></p>
-                        <button id="restart-button" class="mt-6 bg-brand-yellow text-brand-dark font-bold py-2 px-4 rounded-lg transition-all">Agendar Novamente</button>
+                        <button id="restart-button" class="mt-6 bg-brand-gold text-brand-dark font-bold py-2 px-4 rounded-lg transition-all">Agendar Novamente</button>
                     </section>
                 </div>
             </div>
@@ -180,10 +190,10 @@
     </div>
 
     <!-- MODAIS DO AGENDAMENTO (permanecem fora da estrutura principal) -->
-    <div id="filial-modal" class="modal fixed inset-0 bg-black bg-opacity-75 items-end justify-center z-50"> <div class="modal-content-animated bg-brand-gray-dark w-full max-w-lg rounded-t-2xl p-5"><h2 class="text-lg font-bold text-center mb-6 text-white">Selecione a Filial</h2><div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-center"><button data-step="branch" data-value="Filial Centro" class="modal-choice bg-brand-gray-light p-6 rounded-lg hover:bg-brand-yellow hover:text-brand-dark"><i class="fas fa-store mb-2 text-2xl"></i><br>Filial Centro</button><button data-step="branch" data-value="Bom Viver" class="modal-choice bg-brand-gray-light p-6 rounded-lg hover:bg-brand-yellow hover:text-brand-dark"><i class="fas fa-store-alt mb-2 text-2xl"></i><br>Bom Viver</button></div></div></div>
-    <div id="professional-modal" class="modal fixed inset-0 bg-black bg-opacity-75 items-end justify-center z-50"><div class="modal-content-animated bg-brand-gray-dark w-full max-w-lg rounded-t-2xl p-5"><h2 class="text-lg font-bold text-center mb-6 text-white">Selecione o Profissional</h2><div class="grid grid-cols-3 gap-4 text-center"><button data-step="professional" data-value="Cristofer" class="modal-choice p-2 rounded-lg hover:bg-brand-gray-light"><div class="relative"><img src="https://i.ibb.co/L5QGZ4D/cristofer.png" class="w-full h-24 object-cover rounded-lg"><span class="absolute bottom-0 left-0 bg-brand-yellow text-brand-dark text-xs font-bold px-2 py-1 rounded-tr-lg rounded-bl-lg"><i class="fas fa-star text-xs mr-1"></i>Destaque</span></div><p class="mt-2 font-semibold">Cristofer</p></button><button data-step="professional" data-value="Diego Soares" class="modal-choice p-2 rounded-lg hover:bg-brand-gray-light"><img src="https://i.ibb.co/3kL2WSp/diego.png" class="w-full h-24 object-cover rounded-lg"><p class="mt-2 font-semibold">Diego Soares</p></button><button data-step="professional" data-value="Sem preferência" class="modal-choice p-2 rounded-lg hover:bg-brand-gray-light"><div class="w-full h-24 bg-brand-gray-light rounded-lg flex items-center justify-center"><i class="fas fa-user-tie text-4xl text-gray-400"></i></div><p class="mt-2 font-semibold">Sem preferência</p></button></div></div></div>
-    <div id="service-modal" class="modal fixed inset-0 bg-black bg-opacity-75 items-end justify-center z-50"><div class="modal-content-animated bg-brand-gray-dark w-full max-w-lg rounded-t-2xl p-5"><h2 class="text-lg font-bold text-center mb-6 text-white">Escolha o Serviço</h2><div class="space-y-3"><button data-step="service" data-value="Corte" class="modal-choice w-full text-left bg-brand-gray-light p-4 rounded-lg hover:bg-brand-yellow hover:text-brand-dark flex justify-between items-center"><span><i class="fas fa-cut mr-3"></i>Corte</span><span class="font-bold">R$45,00</span></button><button data-step="service" data-value="Barba" class="modal-choice w-full text-left bg-brand-gray-light p-4 rounded-lg hover:bg-brand-yellow hover:text-brand-dark flex justify-between items-center"><span><i class="fas fa-user-ninja mr-3"></i>Barba</span><span class="font-bold">R$30,00</span></button></div></div></div>
-    <div id="datetime-modal" class="modal fixed inset-0 bg-black bg-opacity-75 items-end justify-center z-50"><div class="modal-content-animated bg-brand-gray-dark w-full max-w-lg rounded-t-2xl p-5"><h2 class="text-lg font-bold text-center mb-6 text-white">Escolha a Data e Hora</h2><input type="date" id="date-picker" class="w-full p-3 rounded bg-brand-gray-light border-2 border-transparent focus:border-brand-yellow focus:outline-none"><div id="time-slots" class="grid grid-cols-3 gap-3 mt-4"><p class="col-span-3 text-center text-gray-400">Selecione uma data para ver os horários</p></div></div></div>
+    <div id="filial-modal" class="modal fixed inset-0 bg-black bg-opacity-75 items-end justify-center z-50"> <div class="modal-content-animated bg-brand-gray-dark w-full max-w-lg rounded-t-2xl p-5"><h2 class="text-lg font-bold text-center mb-6 text-white">Selecione a Filial</h2><div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-center"><button data-step="branch" data-value="Filial Centro" class="modal-choice bg-brand-gray-light p-6 rounded-lg hover:bg-brand-gold hover:text-brand-dark"><i class="fas fa-store mb-2 text-2xl"></i><br>Filial Centro</button><button data-step="branch" data-value="Bom Viver" class="modal-choice bg-brand-gray-light p-6 rounded-lg hover:bg-brand-gold hover:text-brand-dark"><i class="fas fa-store-alt mb-2 text-2xl"></i><br>Bom Viver</button></div></div></div>
+    <div id="professional-modal" class="modal fixed inset-0 bg-black bg-opacity-75 items-end justify-center z-50"><div class="modal-content-animated bg-brand-gray-dark w-full max-w-lg rounded-t-2xl p-5"><h2 class="text-lg font-bold text-center mb-6 text-white">Selecione o Profissional</h2><div class="grid grid-cols-3 gap-4 text-center"><button data-step="professional" data-value="Cristofer" class="modal-choice p-2 rounded-lg hover:bg-brand-gray-light"><div class="relative"><img src="https://i.ibb.co/L5QGZ4D/cristofer.png" class="w-full h-24 object-cover rounded-lg"><span class="absolute bottom-0 left-0 bg-brand-gold text-brand-dark text-xs font-bold px-2 py-1 rounded-tr-lg rounded-bl-lg"><i class="fas fa-star text-xs mr-1"></i>Destaque</span></div><p class="mt-2 font-semibold">Cristofer</p></button><button data-step="professional" data-value="Diego Soares" class="modal-choice p-2 rounded-lg hover:bg-brand-gray-light"><img src="https://i.ibb.co/3kL2WSp/diego.png" class="w-full h-24 object-cover rounded-lg"><p class="mt-2 font-semibold">Diego Soares</p></button><button data-step="professional" data-value="Sem preferência" class="modal-choice p-2 rounded-lg hover:bg-brand-gray-light"><div class="w-full h-24 bg-brand-gray-light rounded-lg flex items-center justify-center"><i class="fas fa-user-tie text-4xl text-gray-400"></i></div><p class="mt-2 font-semibold">Sem preferência</p></button></div></div></div>
+    <div id="service-modal" class="modal fixed inset-0 bg-black bg-opacity-75 items-end justify-center z-50"><div class="modal-content-animated bg-brand-gray-dark w-full max-w-lg rounded-t-2xl p-5"><h2 class="text-lg font-bold text-center mb-6 text-white">Escolha o Serviço</h2><div class="space-y-3"><button data-step="service" data-value="Corte" class="modal-choice w-full text-left bg-brand-gray-light p-4 rounded-lg hover:bg-brand-gold hover:text-brand-dark flex justify-between items-center"><span><i class="fas fa-cut mr-3"></i>Corte</span><span class="font-bold">R$45,00</span></button><button data-step="service" data-value="Barba" class="modal-choice w-full text-left bg-brand-gray-light p-4 rounded-lg hover:bg-brand-gold hover:text-brand-dark flex justify-between items-center"><span><i class="fas fa-user-ninja mr-3"></i>Barba</span><span class="font-bold">R$30,00</span></button></div></div></div>
+    <div id="datetime-modal" class="modal fixed inset-0 bg-black bg-opacity-75 items-end justify-center z-50"><div class="modal-content-animated bg-brand-gray-dark w-full max-w-lg rounded-t-2xl p-5"><h2 class="text-lg font-bold text-center mb-6 text-white">Escolha a Data e Hora</h2><input type="date" id="date-picker" class="w-full p-3 rounded bg-brand-gray-light border-2 border-transparent focus:border-brand-gold focus:outline-none"><div id="time-slots" class="grid grid-cols-3 gap-3 mt-4"><p class="col-span-3 text-center text-gray-400">Selecione uma data para ver os horários</p></div></div></div>
 
     <!-- =================================== -->
     <!--          JAVASCRIPT (LÓGICA)        -->
@@ -236,7 +246,7 @@
                                 // Se o refresh falhar, redirecionar para login
                                 this.clearTokens();
                                 this.setCurrentUser(null);
-                                window.location.href = 'login pagina.html';
+                                window.location.href = '/login';
                                 throw new Error('Sessão expirada. Faça login novamente.');
                             }
                         }
@@ -351,7 +361,7 @@
             // Verificar se o usuário está logado
             if (!authManager.isAuthenticated()) {
                 alert('Você precisa estar logado para acessar o dashboard.');
-                window.location.href = 'login pagina.html';
+                window.location.href = '/login';
                 return;
             }
 
@@ -447,7 +457,7 @@
                 ui.timeSlots.innerHTML = '';
                 availableTimes.forEach(time => {
                     const btn = document.createElement('button');
-                    btn.className = "p-3 bg-brand-gray-light rounded hover:bg-brand-yellow hover:text-brand-dark transition-colors";
+                    btn.className = "p-3 bg-brand-gray-light rounded hover:bg-brand-gold hover:text-brand-dark transition-colors";
                     btn.textContent = time;
                     btn.onclick = () => {
                         const formattedDate = date.toLocaleDateString('pt-BR');

@@ -3,7 +3,7 @@
 
 const devConfig = {
     // Configurações do servidor
-    port: process.env.PORT || 3001,
+    port: process.env.PORT || 3000,
     nodeEnv: process.env.NODE_ENV || 'development',
     
     // JWT Secrets (para desenvolvimento)

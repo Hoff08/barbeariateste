@@ -23,10 +23,12 @@ npm run dev
 ### 4. Acessar o Sistema
 Abra seu navegador e acesse: `http://localhost:3000`
 
+**Nota**: Se o servidor estiver rodando na porta 3001, acesse: `http://localhost:3001`
+
 ## 🎯 Fluxo de Teste
 
 ### 1. Landing Page
-- Acesse `http://localhost:3000`
+- Acesse `http://localhost:3000` (ou `http://localhost:3001` se estiver rodando nessa porta)
 - Clique em "Agende seu horário" ou no botão flutuante "Agendar"
 - Será redirecionado para a página de login
 
@@ -68,7 +70,7 @@ O sistema está configurado para funcionar sem configuração de OAuth:
 
 Se encontrar problemas:
 1. Verifique se o Node.js está instalado
-2. Verifique se a porta 3000 está livre
+2. Verifique se as portas 3000 ou 3001 estão livres
 3. Verifique os logs do servidor no terminal
 4. Limpe o cache do navegador
 

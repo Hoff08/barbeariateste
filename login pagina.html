@@ -814,7 +814,7 @@
                 
                 // Redirecionar para o dashboard
                 setTimeout(() => {
-                    window.location.href = 'dashboard.html';
+                    window.location.href = '/dashboard';
                 }, 1000);
                 
             } catch (error) {
@@ -847,7 +847,7 @@
                 const user = await authManager.login(email, password);
                 
                 alert('Login realizado com sucesso! Redirecionando para o dashboard...');
-                window.location.href = 'dashboard.html';
+                window.location.href = '/dashboard';
                 
             } catch (error) {
                 alert(error.message);
@@ -872,7 +872,7 @@
                 const user = await authManager.loginWithGoogle(mockToken);
                 
                 alert('Login com Google realizado com sucesso! (modo dev) Redirecionando...');
-                window.location.href = 'dashboard.html';
+                window.location.href = '/dashboard';
             } catch (error) {
                 alert('Erro ao conectar com Google: ' + error.message);
             } finally {
@@ -896,7 +896,7 @@
             try {
                 const user = await authManager.loginWithGoogle(response.credential);
                 alert('Login com Google realizado com sucesso! Redirecionando...');
-                window.location.href = 'dashboard.html';
+                window.location.href = '/dashboard';
             } catch (error) {
                 alert(error.message);
             } finally {
@@ -921,7 +921,7 @@
                 const user = await authManager.loginWithApple(mockToken);
                 
                 alert('Login com Apple realizado com sucesso! (modo dev) Redirecionando...');
-                window.location.href = 'dashboard.html';
+                window.location.href = '/dashboard';
             } catch (error) {
                 alert('Erro ao conectar com Apple: ' + error.message);
             } finally {
@@ -945,7 +945,7 @@
                 try {
                     const user = await authManager.loginWithApple(response.authorization.id_token);
                     alert('Login com Apple realizado com sucesso! Redirecionando...');
-                    window.location.href = 'dashboard.html';
+                    window.location.href = '/dashboard';
                 } catch (error) {
                     alert(error.message);
                 } finally {
