@@ -1,0 +1,101 @@
+{
+  "project": {
+    "name": "BC Ducorte",
+    "version": "1.0.0",
+    "description": "Sistema de Agendamento para Barbearia",
+    "domain": "cambo.com.br",
+    "mainPage": "dashboard.html"
+  },
+  "files": {
+    "html": [
+      "dashboard.html",
+      "admin-panel.html",
+      "barber-panel.html",
+      "clients-panel.html",
+      "owner-panel.html",
+      "landing-barbearia.html"
+    ],
+    "config": [
+      ".htaccess",
+      "deploy-config.json"
+    ],
+    "assets": [
+      "imagem/"
+    ],
+    "docs": [
+      "SISTEMA_AUTENTICACAO.md",
+      "README.md"
+    ]
+  },
+  "authentication": {
+    "testUsers": {
+      "owner": {
+        "email": "dono@barbearia.com",
+        "password": "123456",
+        "role": "owner",
+        "access": ["admin-panel", "clients-panel", "owner-panel", "barber-panel"]
+      },
+      "employee": {
+        "email": "funcionario1@barbearia.com",
+        "password": "123456",
+        "role": "employee",
+        "access": ["barber-panel"]
+      }
+    }
+  },
+  "deploy": {
+    "ftp": {
+      "enabled": false,
+      "server": "",
+      "username": "",
+      "password": "",
+      "remoteDir": "public_html"
+    },
+    "github": {
+      "enabled": false,
+      "repository": "",
+      "branch": "main"
+    },
+    "netlify": {
+      "enabled": false,
+      "siteId": "",
+      "buildCommand": "",
+      "publishDir": "."
+    },
+    "vercel": {
+      "enabled": false,
+      "projectId": ""
+    }
+  },
+  "features": {
+    "darkMode": true,
+    "authentication": true,
+    "roleBasedAccess": true,
+    "responsive": true
+  },
+  "urls": {
+    "dashboard": "https://cambo.com.br/dashboard.html",
+    "admin": "https://cambo.com.br/admin-panel.html",
+    "barber": "https://cambo.com.br/barber-panel.html",
+    "clients": "https://cambo.com.br/clients-panel.html",
+    "owner": "https://cambo.com.br/owner-panel.html",
+    "landing": "https://cambo.com.br/landing-barbearia.html"
+  },
+  "checklist": {
+    "preDeploy": [
+      "Verificar se todos os arquivos HTML estão funcionando",
+      "Testar login com usuários de teste",
+      "Verificar modo claro/escuro",
+      "Testar navegação entre painéis",
+      "Verificar responsividade"
+    ],
+    "postDeploy": [
+      "Acessar https://cambo.com.br",
+      "Testar login: dono@barbearia.com / 123456",
+      "Testar login: funcionario1@barbearia.com / 123456",
+      "Verificar redirecionamento HTTPS",
+      "Testar em diferentes navegadores",
+      "Verificar performance"
+    ]
+  }
+}

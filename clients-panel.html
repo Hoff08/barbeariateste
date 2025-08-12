@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,12 +21,14 @@
             theme: {
                 extend: {
                     colors: {
-                        'background': '#F8F5F0',
-                        'text-primary': '#1A1A1A',
-                        'text-secondary': '#6B7280',
+                        'background': 'var(--bg-background)',
+                        'text-primary': 'var(--text-primary)',
+                        'text-secondary': 'var(--text-secondary)',
                         'brand-accent': '#FF6B4E',
-                        'brand-dark': '#1A1A1A',
-                        'brand-gray': '#F3F4F6',
+                        'brand-dark': 'var(--brand-dark)',
+                        'brand-gray': 'var(--brand-gray)',
+                        'card-bg': 'var(--card-bg)',
+                        'border-color': 'var(--border-color)',
                     },
                     fontFamily: {
                         'sans': ['Inter', 'sans-serif'],
@@ -37,11 +39,49 @@
     </script>
 
     <style>
-        body { -webkit-font-smoothing: antialiased; }
-        .card { transition: all 0.2s ease; }
-        .card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        :root {
+            --bg-background: #F8F5F0;
+            --text-primary: #1A1A1A;
+            --text-secondary: #6B7280;
+            --brand-dark: #1A1A1A;
+            --brand-gray: #F3F4F6;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+        }
+
+        [data-theme="dark"] {
+            --bg-background: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --brand-dark: #0f0f0f;
+            --brand-gray: #2d2d2d;
+            --card-bg: #2d2d2d;
+            --border-color: #404040;
+        }
+
+        body { 
+            -webkit-font-smoothing: antialiased; 
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .card { 
+            transition: all 0.2s ease; 
+            background-color: var(--card-bg);
+            border-color: var(--border-color);
+        }
+        .card:hover { 
+            transform: translateY(-1px); 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+        }
         .nav-item { transition: all 0.2s ease; }
         .nav-item:hover { background-color: rgba(255,255,255,0.1); }
+        
+        .theme-toggle {
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body class="bg-background font-sans text-text-primary">
@@ -82,14 +122,21 @@
             <div class="max-w-5xl mx-auto">
                 
                 <!-- Header Simples -->
-                <div class="mb-8">
-                    <h1 class="text-2xl font-semibold text-text-primary">Clientes</h1>
-                    <p class="text-text-secondary mt-1">Gerencie sua base de clientes</p>
+                <div class="mb-8 flex justify-between items-center">
+                    <div>
+                        <h1 class="text-2xl font-semibold text-text-primary">Clientes</h1>
+                        <p class="text-text-secondary mt-1">Gerencie sua base de clientes</p>
+                    </div>
+                    
+                    <!-- Botão de Tema -->
+                    <button id="theme-toggle" class="theme-toggle p-3 bg-brand-accent/10 rounded-lg text-brand-accent hover:bg-brand-accent/20 transition-colors">
+                        <i class="fa-solid fa-sun text-lg" id="theme-icon"></i>
+                    </button>
                 </div>
 
                 <!-- Estatísticas Essenciais -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="card bg-white p-6 rounded-xl border border-gray-100">
+                    <div class="card bg-card-bg p-6 rounded-xl border border-border-color">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-text-secondary text-sm">Total</p>
@@ -101,7 +148,7 @@
                         </div>
                     </div>
                     
-                    <div class="card bg-white p-6 rounded-xl border border-gray-100">
+                    <div class="card bg-card-bg p-6 rounded-xl border border-border-color">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-text-secondary text-sm">Premium</p>
@@ -113,7 +160,7 @@
                         </div>
                     </div>
                     
-                    <div class="card bg-white p-6 rounded-xl border border-gray-100">
+                    <div class="card bg-card-bg p-6 rounded-xl border border-border-color">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-text-secondary text-sm">Este Mês</p>
@@ -130,8 +177,8 @@
                 <div class="flex justify-between items-center mb-6">
                     <div class="relative">
                         <input type="text" id="search-input" placeholder="Buscar..." 
-                               class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent w-64">
-                        <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                               class="pl-10 pr-4 py-2 border border-border-color rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent w-64 bg-card-bg text-text-primary">
+                        <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary"></i>
                     </div>
                     
                     <button id="add-client-btn" class="bg-brand-accent text-white px-6 py-2 rounded-lg hover:bg-red-500 transition-colors">
@@ -140,9 +187,9 @@
                 </div>
 
                 <!-- Tabela Simplificada -->
-                <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                <div class="bg-card-bg rounded-xl border border-border-color overflow-hidden">
                     <table class="w-full">
-                        <thead class="bg-gray-50">
+                        <thead class="bg-brand-gray">
                             <tr>
                                 <th class="text-left p-4 font-medium text-text-primary text-sm">Cliente</th>
                                 <th class="text-left p-4 font-medium text-text-primary text-sm">Contato</th>
@@ -162,10 +209,10 @@
 
     <!-- Modal Simplificado -->
     <div id="client-modal" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+        <div class="bg-card-bg rounded-xl p-6 max-w-md w-full mx-4">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-semibold" id="modal-title">Novo Cliente</h2>
-                <button id="close-modal" class="text-gray-400 hover:text-gray-600">
+                <h2 class="text-xl font-semibold text-text-primary" id="modal-title">Novo Cliente</h2>
+                <button id="close-modal" class="text-text-secondary hover:text-text-primary">
                     <i class="fa-solid fa-times"></i>
                 </button>
             </div>
@@ -176,25 +223,25 @@
                 <div>
                     <label for="name" class="block text-sm font-medium text-text-primary mb-2">Nome</label>
                     <input type="text" id="name" name="name" required
-                           class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent">
+                           class="w-full px-3 py-2 border border-border-color rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent bg-card-bg text-text-primary">
                 </div>
                 
                 <div>
                     <label for="email" class="block text-sm font-medium text-text-primary mb-2">E-mail</label>
                     <input type="email" id="email" name="email" required
-                           class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent">
+                           class="w-full px-3 py-2 border border-border-color rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent bg-card-bg text-text-primary">
                 </div>
                 
                 <div>
                     <label for="phone" class="block text-sm font-medium text-text-primary mb-2">Telefone</label>
                     <input type="tel" id="phone" name="phone" required
-                           class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent">
+                           class="w-full px-3 py-2 border border-border-color rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent bg-card-bg text-text-primary">
                 </div>
                 
                 <div>
                     <label for="client-type" class="block text-sm font-medium text-text-primary mb-2">Tipo</label>
                     <select id="client-type" name="clientType" required
-                            class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent">
+                            class="w-full px-3 py-2 border border-border-color rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent bg-card-bg text-text-primary">
                         <option value="">Selecione...</option>
                         <option value="new">Novo</option>
                         <option value="regular">Regular</option>
@@ -203,7 +250,7 @@
                 </div>
 
                 <div class="flex justify-end gap-3 pt-4">
-                    <button type="button" id="cancel-btn" class="px-4 py-2 border border-gray-200 rounded-lg text-text-secondary hover:bg-gray-50">
+                    <button type="button" id="cancel-btn" class="px-4 py-2 border border-border-color rounded-lg text-text-secondary hover:bg-brand-gray">
                         Cancelar
                     </button>
                     <button type="submit" class="px-4 py-2 bg-brand-accent text-white rounded-lg hover:bg-red-500 transition-colors">
@@ -238,11 +285,40 @@
             newClients: document.getElementById('new-clients')
         };
 
+        // Verificação de autenticação
+        function checkAuth() {
+            const userEmail = localStorage.getItem('userEmail');
+            const userData = localStorage.getItem('userData');
+            
+            if (!userEmail || !userData) {
+                alert('Acesso negado. Faça login primeiro.');
+                window.location.href = 'dashboard.html';
+                return false;
+            }
+            
+            const user = JSON.parse(userData);
+            
+            // Verificar se o usuário tem acesso ao clients-panel (apenas owner)
+            if (user.role !== 'owner') {
+                alert('Você não tem permissão para acessar este painel.');
+                window.location.href = 'dashboard.html';
+                return false;
+            }
+            
+            return true;
+        }
+
         // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
+            // Verificar autenticação primeiro
+            if (!checkAuth()) {
+                return;
+            }
+            
             initializeEventListeners();
             updateDashboard();
             renderTable();
+            initializeThemeToggle();
         });
 
         function initializeEventListeners() {
@@ -321,14 +397,14 @@
 
         function renderTable() {
             elements.tableBody.innerHTML = filteredClients.map(client => `
-                <tr class="border-b border-gray-100">
+                <tr class="border-b border-border-color">
                     <td class="p-4">
                         <div class="flex items-center">
                             <div class="w-8 h-8 bg-brand-accent/10 rounded-full flex items-center justify-center mr-3">
                                 <i class="fa-solid fa-user text-brand-accent text-sm"></i>
                             </div>
                             <div>
-                                <span class="font-medium">${client.name}</span>
+                                <span class="font-medium text-text-primary">${client.name}</span>
                                 <p class="text-xs text-text-secondary">Desde ${new Date(client.joinDate).toLocaleDateString('pt-BR')}</p>
                             </div>
                         </div>
@@ -387,6 +463,36 @@
                 return joinDate.getMonth() === now.getMonth() && joinDate.getFullYear() === now.getFullYear();
             }).length;
             elements.newClients.textContent = newThisMonth;
+        }
+
+        function initializeThemeToggle() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+
+            if (currentTheme === 'dark') {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            } else {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+
+            themeToggle.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const newTheme = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+
+                if (newTheme === 'dark') {
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                } else {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                }
+            });
         }
     </script>
 

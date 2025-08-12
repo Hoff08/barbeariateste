@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,12 +21,18 @@
             theme: {
                 extend: {
                     colors: {
-                        'background': '#F8F5F0',
-                        'text-primary': '#1A1A1A',
-                        'text-secondary': '#6B7280',
+                        'main-dark': 'var(--main-dark)',
+                        'content-dark': 'var(--content-dark)',
+                        'sidebar-dark': 'var(--sidebar-dark)',
+                        'text-light': 'var(--text-light)',
+                        'text-secondary': 'var(--text-secondary)',
                         'brand-accent': '#FF6B4E',
-                        'brand-dark': '#1A1A1A',
-                        'brand-gray': '#F3F4F6',
+                        'brand-accent-hover': '#e55a3f',
+                        'border-dark': 'var(--border-dark)',
+                        'hover-dark': 'var(--hover-dark)',
+                        'success': '#10b981',
+                        'warning': '#f59e0b',
+                        'danger': '#ef4444'
                     },
                     fontFamily: {
                         'sans': ['Inter', 'sans-serif'],
@@ -37,96 +43,355 @@
     </script>
 
     <style>
-        body { -webkit-font-smoothing: antialiased; }
+        :root {
+            --main-dark: #1a1a1a;
+            --content-dark: #2d2d2d;
+            --sidebar-dark: #0f0f0f;
+            --text-light: #ffffff;
+            --text-secondary: #a0a0a0;
+            --border-dark: #404040;
+            --hover-dark: #3a3a3a;
+        }
+
+        [data-theme="light"] {
+            --main-dark: #ffffff;
+            --content-dark: #f8f9fa;
+            --sidebar-dark: #f1f3f4;
+            --text-light: #1a1a1a;
+            --text-secondary: #6b7280;
+            --border-dark: #e5e7eb;
+            --hover-dark: #f3f4f6;
+        }
+        
+        body { 
+            -webkit-font-smoothing: antialiased; 
+            background-color: var(--main-dark);
+            color: var(--text-light);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
         .calendar-grid { display: grid; grid-template-columns: 100px repeat(5, 1fr); }
-        .time-slot { min-height: 70px; border-bottom: 1px solid #e5e7eb; }
+        .time-slot { min-height: 70px; border-bottom: 1px solid var(--border-dark); }
+        
         .appointment-block { 
-            background: #1f2937; 
-            color: white; 
-            padding: 6px; 
-            border-radius: 6px; 
-            margin: 1px; 
+            background: var(--content-dark); 
+            color: var(--text-light); 
+            padding: 8px; 
+            border-radius: 8px; 
+            margin: 2px; 
             font-size: 11px; 
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            position: relative;
         }
-        .appointment-block:hover { transform: scale(1.02); }
-        .appointment-block.selected { border: 2px solid #3b82f6; }
+        .appointment-block:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border-left-color: #FF6B4E;
+        }
+        .appointment-block.selected { 
+            border-left-color: #FF6B4E;
+            background: var(--hover-dark);
+            box-shadow: 0 0 0 2px rgba(255, 107, 78, 0.3);
+        }
         
         .professional-tab { 
-            padding: 6px 12px; 
-            border-radius: 16px; 
+            padding: 8px 16px; 
+            border-radius: 20px; 
             cursor: pointer; 
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             border: 2px solid transparent;
             font-size: 13px;
+            font-weight: 500;
         }
         .professional-tab.active { 
             background: #FF6B4E; 
             color: white; 
             border-color: #FF6B4E;
+            box-shadow: 0 4px 12px rgba(255, 107, 78, 0.3);
         }
         .professional-tab:not(.active) { 
-            background: #f3f4f6; 
-            color: #374151;
+            background: var(--content-dark); 
+            color: var(--text-secondary);
+            border-color: var(--border-dark);
         }
-        .professional-tab:not(.active):hover { background: #e5e7eb; }
+        .professional-tab:not(.active):hover { 
+            background: var(--hover-dark); 
+            border-color: #FF6B4E;
+            color: var(--text-light);
+        }
 
         .action-button { 
-            width: 40px; 
-            height: 40px; 
+            width: 44px; 
+            height: 44px; 
             border-radius: 50%; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             cursor: pointer; 
-            transition: all 0.2s ease;
-            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+            border: 2px solid var(--border-dark);
+            background: var(--content-dark);
+            color: var(--text-secondary);
         }
-        .action-button:hover { transform: scale(1.1); border-color: #FF6B4E; }
+        .action-button:hover { 
+            transform: scale(1.1); 
+            border-color: #FF6B4E; 
+            background: var(--hover-dark);
+            color: var(--text-light);
+        }
+
+        /* Sidebar aprimorado */
+        .sidebar {
+            background: var(--sidebar-dark);
+            border-right: 1px solid var(--border-dark);
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar.collapsed {
+            width: 80px;
+        }
+        
+        .sidebar.collapsed .sidebar-text {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        
+        .sidebar.collapsed .sidebar-icon {
+            transform: scale(1.2);
+        }
+        
+        .sidebar-toggle {
+            position: absolute;
+            top: 20px;
+            right: -12px;
+            width: 24px;
+            height: 24px;
+            background: #FF6B4E;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .sidebar-toggle:hover {
+            transform: scale(1.1);
+            background: #e55a3f;
+        }
+        
+        .sidebar-toggle i {
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar.collapsed .sidebar-toggle i {
+            transform: rotate(180deg);
+        }
+
+        /* Painel de detalhes dinâmico */
+        .details-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: var(--content-dark);
+            border-left: 1px solid var(--border-dark);
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+            overflow-y: auto;
+        }
+        
+        .details-panel.open {
+            right: 0;
+        }
+        
+        .details-header {
+            background: var(--main-dark);
+            padding: 24px;
+            border-bottom: 1px solid var(--border-dark);
+            position: sticky;
+            top: 0;
+        }
+        
+        .details-content {
+            padding: 24px;
+        }
+        
+        .details-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .details-close:hover {
+            color: var(--text-light);
+            transform: scale(1.1);
+        }
+
+        /* Estilos para o menu mobile */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 40;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 50;
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .details-panel {
+                width: 100%;
+                right: -100%;
+            }
+        }
+
+        /* Animações e transições */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.4s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .theme-toggle {
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
-<body class="bg-background font-sans text-text-primary">
+<body class="bg-main-dark font-sans text-text-light">
+
+    <!-- Overlay para mobile -->
+    <div class="sidebar-overlay md:hidden" id="sidebarOverlay"></div>
+
+    <!-- Painel de Detalhes Dinâmico -->
+    <div class="details-panel" id="detailsPanel">
+        <div class="details-header">
+            <button class="details-close" id="closeDetails">
+                <i class="fa-solid fa-times"></i>
+            </button>
+            <div id="detailsHeaderContent">
+                <h2 class="text-xl font-semibold text-text-light">Selecione um Agendamento</h2>
+                <p class="text-text-secondary mt-2">Clique no calendário para ver os detalhes</p>
+            </div>
+        </div>
+        <div class="details-content" id="detailsContent">
+            <!-- Conteúdo será preenchido dinamicamente -->
+        </div>
+    </div>
 
     <div class="flex min-h-screen">
-        <!-- Sidebar Minimalista -->
-        <aside class="w-64 bg-brand-dark text-white p-6 flex-col hidden md:flex">
+        <!-- Sidebar Minimalista Aprimorado -->
+        <aside class="sidebar w-64 p-6 flex-col hidden md:flex relative" id="sidebar">
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            
             <div class="mb-8">
-                <h1 class="text-2xl font-semibold">BC</h1>
-                <p class="text-xs text-gray-400 uppercase tracking-wider">Barbeiro</p>
+                <h1 class="text-2xl font-semibold sidebar-text">BC</h1>
+                <p class="text-xs text-text-secondary uppercase tracking-wider sidebar-text">Barbeiro</p>
             </div>
             
-            <nav class="flex flex-col space-y-1">
-                <a href="#" class="flex items-center p-3 text-white bg-brand-accent rounded-lg">
-                    <i class="fa-solid fa-calendar-day w-5 text-center"></i>
+            <nav class="flex flex-col space-y-2">
+                <a href="#" class="flex items-center p-3 text-text-light bg-brand-accent rounded-lg sidebar-text">
+                    <i class="fa-solid fa-calendar-day w-5 text-center sidebar-icon"></i>
                     <span class="ml-3 text-sm">Calendário</span>
                 </a>
-                <a href="#" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-white/10">
-                    <i class="fa-solid fa-clock w-5 text-center"></i>
+                <a href="#" class="flex items-center p-3 text-text-secondary rounded-lg hover:bg-hover-dark transition-colors sidebar-text">
+                    <i class="fa-solid fa-clock w-5 text-center sidebar-icon"></i>
                     <span class="ml-3 text-sm">Horários</span>
                 </a>
-                <a href="#" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-white/10">
-                    <i class="fa-solid fa-user-friends w-5 text-center"></i>
+                <a href="#" class="flex items-center p-3 text-text-secondary rounded-lg hover:bg-hover-dark transition-colors sidebar-text">
+                    <i class="fa-solid fa-user-friends w-5 text-center sidebar-icon"></i>
                     <span class="ml-3 text-sm">Clientes</span>
                 </a>
             </nav>
             
             <div class="mt-auto">
-                <a href="admin-panel.html" class="flex items-center p-3 text-gray-400 rounded-lg hover:bg-white/10">
-                    <i class="fa-solid fa-arrow-left w-5 text-center"></i>
+                <a href="admin-panel.html" class="flex items-center p-3 text-text-secondary rounded-lg hover:bg-hover-dark transition-colors sidebar-text">
+                    <i class="fa-solid fa-arrow-left w-5 text-center sidebar-icon"></i>
                     <span class="ml-3 text-sm">Admin</span>
                 </a>
             </div>
+
+            <!-- Botão fechar para mobile -->
+            <button class="md:hidden absolute top-4 right-4 text-text-light hover:text-brand-accent" id="closeSidebar">
+                <i class="fa-solid fa-times text-xl"></i>
+            </button>
         </aside>
 
         <!-- Conteúdo Principal -->
-        <main class="flex-1 p-8">
+        <main class="flex-1 p-8 bg-main-dark">
+            <!-- Header com botão de menu mobile -->
+            <div class="flex items-center justify-between mb-6 md:hidden">
+                <button class="text-text-light hover:text-brand-accent" id="openSidebar">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <h1 class="text-xl font-semibold text-text-light">Calendário</h1>
+                <div class="w-8"></div> <!-- Espaçador para centralizar o título -->
+            </div>
+
             <div class="max-w-6xl mx-auto">
                 
-                <!-- Header Simples -->
-                <div class="mb-6">
-                    <h1 class="text-2xl font-semibold text-text-primary">Calendário</h1>
-                    <p class="text-text-secondary mt-1">Gerencie sua agenda</p>
+                <!-- Header Simples (oculto no mobile) -->
+                <div class="mb-6 hidden md:block flex justify-between items-center">
+                    <div>
+                        <h1 class="text-2xl font-semibold text-text-light">Calendário</h1>
+                        <p class="text-text-secondary mt-1">Gerencie sua agenda</p>
+                    </div>
+                    
+                    <!-- Botão de Tema -->
+                    <button id="theme-toggle" class="theme-toggle p-3 bg-brand-accent/10 rounded-lg text-brand-accent hover:bg-brand-accent/20 transition-colors">
+                        <i class="fa-solid fa-sun text-lg" id="theme-icon"></i>
+                    </button>
                 </div>
 
                 <!-- Seleção de Profissionais -->
@@ -151,22 +416,22 @@
                 </div>
 
                 <!-- Calendário e Detalhes -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Calendário Semanal -->
                     <div class="lg:col-span-2">
-                        <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                        <div class="bg-content-dark rounded-xl border border-border-dark overflow-hidden">
                             <!-- Cabeçalho do Calendário -->
-                            <div class="bg-gray-50 p-4 border-b border-gray-100">
+                            <div class="bg-main-dark p-4 border-b border-border-dark">
                                 <div class="flex items-center justify-between">
                                     <div>
-                                        <h3 class="font-medium text-text-primary" id="current-date">20 - 24 Janeiro</h3>
+                                        <h3 class="font-medium text-text-light" id="current-date">20 - 24 Janeiro</h3>
                                         <p class="text-sm text-text-secondary" id="current-time">9:41 Seg Jun 3</p>
                                     </div>
                                     <div class="flex gap-2">
-                                        <button id="prev-week" class="p-2 hover:bg-gray-200 rounded-lg">
+                                        <button id="prev-week" class="p-2 hover:bg-hover-dark rounded-lg text-text-light hover:text-brand-accent transition-colors">
                                             <i class="fa-solid fa-chevron-left"></i>
                                         </button>
-                                        <button id="next-week" class="p-2 hover:bg-gray-200 rounded-lg">
+                                        <button id="next-week" class="p-2 hover:bg-hover-dark rounded-lg text-text-light hover:text-brand-accent transition-colors">
                                             <i class="fa-solid fa-chevron-right"></i>
                                         </button>
                                     </div>
@@ -177,86 +442,76 @@
                             <div class="overflow-x-auto">
                                 <div class="calendar-grid min-w-[700px]">
                                     <!-- Cabeçalho com horários -->
-                                    <div class="bg-gray-50 p-3 font-medium text-text-primary text-sm text-center">Hora</div>
-                                    <div class="bg-gray-50 p-3 font-medium text-text-primary text-sm text-center">Seg</div>
-                                    <div class="bg-gray-50 p-3 font-medium text-text-primary text-sm text-center">Ter</div>
-                                    <div class="bg-gray-50 p-3 font-medium text-text-primary text-sm text-center">Qua</div>
-                                    <div class="bg-gray-50 p-3 font-medium text-text-primary text-sm text-center">Qui</div>
-                                    <div class="bg-gray-50 p-3 font-medium text-text-primary text-sm text-center">Sex</div>
+                                    <div class="bg-main-dark p-3 font-medium text-text-light text-sm text-center border-r border-border-dark">Hora</div>
+                                    <div class="bg-main-dark p-3 font-medium text-text-light text-sm text-center border-r border-border-dark">Seg</div>
+                                    <div class="bg-main-dark p-3 font-medium text-text-light text-sm text-center border-r border-border-dark">Ter</div>
+                                    <div class="bg-main-dark p-3 font-medium text-text-light text-sm text-center border-r border-border-dark">Qua</div>
+                                    <div class="bg-main-dark p-3 font-medium text-text-light text-sm text-center border-r border-border-dark">Qui</div>
+                                    <div class="bg-main-dark p-3 font-medium text-text-light text-sm text-center">Sex</div>
 
                                     <!-- Linhas de horários -->
-                                    <div class="time-slot p-2 text-sm text-text-secondary text-center">10:00</div>
-                                    <div class="time-slot p-2" id="monday-10"></div>
-                                    <div class="time-slot p-2" id="tuesday-10"></div>
-                                    <div class="time-slot p-2" id="wednesday-10"></div>
-                                    <div class="time-slot p-2" id="thursday-10"></div>
+                                    <div class="time-slot p-2 text-sm text-text-secondary text-center border-r border-border-dark">10:00</div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="monday-10"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="tuesday-10"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="wednesday-10"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="thursday-10"></div>
                                     <div class="time-slot p-2" id="friday-10"></div>
 
-                                    <div class="time-slot p-2 text-sm text-text-secondary text-center">11:00</div>
-                                    <div class="time-slot p-2" id="monday-11"></div>
-                                    <div class="time-slot p-2" id="tuesday-11"></div>
-                                    <div class="time-slot p-2" id="wednesday-11"></div>
-                                    <div class="time-slot p-2" id="thursday-11"></div>
+                                    <div class="time-slot p-2 text-sm text-text-secondary text-center border-r border-border-dark">11:00</div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="monday-11"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="tuesday-11"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="wednesday-11"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="thursday-11"></div>
                                     <div class="time-slot p-2" id="friday-11"></div>
 
-                                    <div class="time-slot p-2 text-sm text-text-secondary text-center">12:00</div>
-                                    <div class="time-slot p-2" id="monday-12"></div>
-                                    <div class="time-slot p-2" id="tuesday-12"></div>
-                                    <div class="time-slot p-2" id="wednesday-12"></div>
-                                    <div class="time-slot p-2" id="thursday-12"></div>
+                                    <div class="time-slot p-2 text-sm text-text-secondary text-center border-r border-border-dark">12:00</div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="monday-12"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="tuesday-12"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="wednesday-12"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="thursday-12"></div>
                                     <div class="time-slot p-2" id="friday-12"></div>
 
-                                    <div class="time-slot p-2 text-sm text-text-secondary text-center">13:00</div>
-                                    <div class="time-slot p-2" id="monday-13"></div>
-                                    <div class="time-slot p-2" id="tuesday-13"></div>
-                                    <div class="time-slot p-2" id="wednesday-13"></div>
-                                    <div class="time-slot p-2" id="thursday-13"></div>
+                                    <div class="time-slot p-2 text-sm text-text-secondary text-center border-r border-border-dark">13:00</div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="monday-13"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="tuesday-13"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="wednesday-13"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="thursday-13"></div>
                                     <div class="time-slot p-2" id="friday-13"></div>
 
-                                    <div class="time-slot p-2 text-sm text-text-secondary text-center">14:00</div>
-                                    <div class="time-slot p-2" id="monday-14"></div>
-                                    <div class="time-slot p-2" id="tuesday-14"></div>
-                                    <div class="time-slot p-2" id="wednesday-14"></div>
-                                    <div class="time-slot p-2" id="thursday-14"></div>
+                                    <div class="time-slot p-2 text-sm text-text-secondary text-center border-r border-border-dark">14:00</div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="monday-14"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="tuesday-14"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="wednesday-14"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="thursday-14"></div>
                                     <div class="time-slot p-2" id="friday-14"></div>
 
-                                    <div class="time-slot p-2 text-sm text-text-secondary text-center">15:00</div>
-                                    <div class="time-slot p-2" id="monday-15"></div>
-                                    <div class="time-slot p-2" id="tuesday-15"></div>
-                                    <div class="time-slot p-2" id="wednesday-15"></div>
-                                    <div class="time-slot p-2" id="thursday-15"></div>
+                                    <div class="time-slot p-2 text-sm text-text-secondary text-center border-r border-border-dark">15:00</div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="monday-15"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="tuesday-15"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="wednesday-15"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="thursday-15"></div>
                                     <div class="time-slot p-2" id="friday-15"></div>
 
-                                    <div class="time-slot p-2 text-sm text-text-secondary text-center">16:00</div>
-                                    <div class="time-slot p-2" id="monday-16"></div>
-                                    <div class="time-slot p-2" id="tuesday-16"></div>
-                                    <div class="time-slot p-2" id="wednesday-16"></div>
-                                    <div class="time-slot p-2" id="thursday-16"></div>
+                                    <div class="time-slot p-2 text-sm text-text-secondary text-center border-r border-border-dark">16:00</div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="monday-16"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="tuesday-16"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="wednesday-16"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="thursday-16"></div>
                                     <div class="time-slot p-2" id="friday-16"></div>
 
-                                    <div class="time-slot p-2 text-sm text-text-secondary text-center">17:00</div>
-                                    <div class="time-slot p-2" id="monday-17"></div>
-                                    <div class="time-slot p-2" id="tuesday-17"></div>
-                                    <div class="time-slot p-2" id="wednesday-17"></div>
-                                    <div class="time-slot p-2" id="thursday-17"></div>
+                                    <div class="time-slot p-2 text-sm text-text-secondary text-center border-r border-border-dark">17:00</div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="monday-17"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="tuesday-17"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="wednesday-17"></div>
+                                    <div class="time-slot p-2 border-r border-border-dark" id="thursday-17"></div>
                                     <div class="time-slot p-2" id="friday-17"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Painel de Detalhes -->
-                    <div class="lg:col-span-1">
-                        <div class="bg-white rounded-xl border border-gray-100 p-6">
-                            <div id="appointment-details" class="text-center">
-                                <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                                    <i class="fa-solid fa-calendar text-2xl text-gray-400"></i>
-                                </div>
-                                <h3 class="font-medium text-text-primary mb-2">Selecione um Agendamento</h3>
-                                <p class="text-text-secondary text-sm">Clique no calendário</p>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Espaço liberado para o calendário -->
+                    <div class="lg:col-span-1"></div>
                 </div>
             </div>
         </main>
@@ -325,15 +580,30 @@
             currentTime: document.getElementById('current-time'),
             prevWeek: document.getElementById('prev-week'),
             nextWeek: document.getElementById('next-week'),
-            appointmentDetails: document.getElementById('appointment-details')
+            sidebar: document.getElementById('sidebar'),
+            sidebarOverlay: document.getElementById('sidebarOverlay'),
+            openSidebarBtn: document.getElementById('openSidebar'),
+            closeSidebarBtn: document.getElementById('closeSidebar'),
+            sidebarToggle: document.getElementById('sidebarToggle'),
+            sidebarCollapse: document.getElementById('sidebar'), // Usar a própria sidebar para toggle
+            detailsPanel: document.getElementById('detailsPanel'),
+            closeDetailsBtn: document.getElementById('closeDetails'),
+            detailsHeaderContent: document.getElementById('detailsHeaderContent'),
+            detailsContent: document.getElementById('detailsContent')
         };
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
+            // Verificar autenticação primeiro
+            if (!checkAuth()) {
+                return;
+            }
+            
             initializeEventListeners();
             updateCurrentTime();
             renderCalendar();
             setInterval(updateCurrentTime, 60000);
+            initializeTheme();
         });
 
         function initializeEventListeners() {
@@ -357,6 +627,43 @@
                 currentWeek.setDate(currentWeek.getDate() + 7);
                 renderCalendar();
             });
+
+            // Funções para abrir/fechar sidebar
+            elements.openSidebarBtn.addEventListener('click', () => {
+                elements.sidebar.classList.add('open');
+                elements.sidebarOverlay.classList.add('active');
+            });
+
+            elements.closeSidebarBtn.addEventListener('click', () => {
+                elements.sidebar.classList.remove('open');
+                elements.sidebarOverlay.classList.remove('active');
+            });
+
+            elements.sidebarOverlay.addEventListener('click', () => {
+                elements.sidebar.classList.remove('open');
+                elements.sidebarOverlay.classList.remove('active');
+            });
+
+            // Funções para abrir/fechar painel de detalhes
+            elements.closeDetailsBtn.addEventListener('click', () => {
+                elements.detailsPanel.classList.remove('open');
+                elements.detailsContent.innerHTML = ''; // Limpar conteúdo
+            });
+
+            elements.detailsPanel.addEventListener('click', (event) => {
+                if (event.target === elements.detailsPanel) {
+                    elements.detailsPanel.classList.remove('open');
+                    elements.detailsContent.innerHTML = ''; // Limpar conteúdo
+                }
+            });
+
+            // Toggle da sidebar
+            elements.sidebarToggle.addEventListener('click', () => {
+                elements.sidebarCollapse.classList.toggle('collapsed');
+            });
+
+            // Event listener para o botão de tema
+            document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
         }
 
         function updateCurrentTime() {
@@ -432,59 +739,103 @@
             // Adicionar seleção ao bloco clicado
             event.target.closest('.appointment-block').classList.add('selected');
             
-            // Renderizar detalhes
-            renderAppointmentDetails(appointment);
+            // Abrir painel de detalhes
+            openDetailsPanel(appointment);
         }
 
-        function renderAppointmentDetails(appointment) {
-            const details = document.getElementById('appointment-details');
-            details.innerHTML = `
-                <div class="text-left">
-                    <!-- Cliente -->
-                    <div class="text-center mb-4">
-                        <div class="w-16 h-16 mx-auto bg-gray-200 rounded-full flex items-center justify-center mb-2">
-                            <i class="fa-solid fa-user text-xl text-gray-400"></i>
+        function openDetailsPanel(appointment) {
+            // Atualizar header do painel
+            elements.detailsHeaderContent.innerHTML = `
+                <h2 class="text-xl font-semibold text-text-light">${appointment.clientName}</h2>
+                <p class="text-text-secondary mt-2">${appointment.service} • ${new Date(appointment.date).toLocaleDateString('pt-BR')}, ${appointment.time}</p>
+            `;
+            
+            // Renderizar conteúdo do painel
+            renderDetailsContent(appointment);
+            
+            // Abrir painel com animação
+            elements.detailsPanel.classList.add('open');
+        }
+
+        function renderDetailsContent(appointment) {
+            const content = elements.detailsContent;
+            
+            content.innerHTML = `
+                <div class="space-y-6">
+                    <!-- Avatar e Informações do Cliente -->
+                    <div class="text-center">
+                        <div class="w-20 h-20 mx-auto bg-brand-accent rounded-full flex items-center justify-center mb-3">
+                            <span class="text-2xl font-bold text-white">${appointment.clientName.charAt(0)}</span>
                         </div>
-                        <h3 class="font-medium text-text-primary">${appointment.clientName}</h3>
+                        <h3 class="text-lg font-semibold text-text-light">${appointment.clientName}</h3>
+                        <p class="text-text-secondary text-sm">Cliente ${appointment.status === 'confirmed' ? 'Confirmado' : 'Pendente'}</p>
                     </div>
                     
-                    <!-- Informações -->
-                    <div class="space-y-3 mb-6">
-                        <div class="text-sm">
-                            <span class="text-text-secondary">${new Date(appointment.date).toLocaleDateString('pt-BR')}, ${appointment.time}</span>
+                    <!-- Detalhes do Serviço -->
+                    <div class="bg-main-dark rounded-lg p-4">
+                        <h4 class="font-medium text-text-light mb-3">Detalhes do Serviço</h4>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-text-secondary">Serviço:</span>
+                                <span class="text-text-light font-medium">${appointment.service}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-text-secondary">Data:</span>
+                                <span class="text-text-light">${new Date(appointment.date).toLocaleDateString('pt-BR')}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-text-secondary">Horário:</span>
+                                <span class="text-text-light">${appointment.time}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-text-secondary">Duração:</span>
+                                <span class="text-text-light">${appointment.duration} min</span>
+                            </div>
                         </div>
-                        <div class="text-sm">
-                            <span class="font-medium">${appointment.service}</span>
-                        </div>
-                        <div class="text-sm text-text-secondary">
-                            <span>R$ ${appointment.price.toFixed(2)}</span>
+                    </div>
+                    
+                    <!-- Informações de Pagamento -->
+                    <div class="bg-main-dark rounded-lg p-4">
+                        <h4 class="font-medium text-text-light mb-3">Pagamento</h4>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-text-secondary">Valor:</span>
+                                <span class="text-text-light font-semibold text-lg">R$ ${appointment.price.toFixed(2)}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-text-secondary">Status:</span>
+                                <span class="px-2 py-1 rounded-full text-xs font-medium ${
+                                    appointment.status === 'confirmed' ? 'bg-success text-white' : 'bg-warning text-white'
+                                }">
+                                    ${appointment.status === 'confirmed' ? 'Confirmado' : 'Pendente'}
+                                </span>
+                            </div>
                         </div>
                     </div>
                     
                     <!-- Notas -->
                     ${appointment.notes ? `
-                    <div class="mb-6">
-                        <div class="text-sm text-text-secondary">
-                            <p>${appointment.notes}</p>
-                        </div>
+                    <div class="bg-main-dark rounded-lg p-4">
+                        <h4 class="font-medium text-text-light mb-3">Notas</h4>
+                        <p class="text-text-secondary text-sm leading-relaxed">${appointment.notes}</p>
                     </div>
                     ` : ''}
                     
                     <!-- Botões de Ação -->
-                    <div class="flex justify-center gap-2 mb-4">
-                        <div class="action-button" title="Cancelar">
-                            <i class="fa-solid fa-times text-red-500 text-sm"></i>
-                        </div>
-                        <div class="action-button" title="Adicionar">
-                            <i class="fa-solid fa-plus text-brand-accent text-sm"></i>
-                        </div>
-                        <div class="action-button" title="Produtos">
-                            <i class="fa-solid fa-shopping-cart text-brand-accent text-sm"></i>
-                        </div>
+                    <div class="flex justify-center gap-3 mb-4">
+                        <button class="action-button" title="Cancelar">
+                            <i class="fa-solid fa-times text-danger"></i>
+                        </button>
+                        <button class="action-button" title="Adicionar">
+                            <i class="fa-solid fa-plus text-brand-accent"></i>
+                        </button>
+                        <button class="action-button" title="Produtos">
+                            <i class="fa-solid fa-shopping-cart text-brand-accent"></i>
+                        </button>
                     </div>
                     
                     <!-- Botão de Cobrança -->
-                    <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">
+                    <button class="w-full bg-brand-accent hover:bg-brand-accent-hover text-white py-3 rounded-lg font-semibold transition-colors text-sm">
                         Cobrar R$ ${appointment.price.toFixed(2)}
                     </button>
                 </div>
@@ -494,6 +845,54 @@
         function getMonthName(month) {
             const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
             return months[month];
+        }
+
+        // Verificação de autenticação
+        function checkAuth() {
+            const userEmail = localStorage.getItem('userEmail');
+            const userData = localStorage.getItem('userData');
+            
+            if (!userEmail || !userData) {
+                alert('Acesso negado. Faça login primeiro.');
+                window.location.href = 'dashboard.html';
+                return false;
+            }
+            
+            const user = JSON.parse(userData);
+            
+            // Verificar se o usuário tem acesso ao barber-panel
+            if (user.role !== 'employee' && user.role !== 'owner') {
+                alert('Você não tem permissão para acessar este painel.');
+                window.location.href = 'dashboard.html';
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Funções de Tema
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        }
+
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('theme-icon');
+            if (theme === 'dark') {
+                icon.className = 'fa-solid fa-moon text-lg';
+            } else {
+                icon.className = 'fa-solid fa-sun text-lg';
+            }
         }
     </script>
 

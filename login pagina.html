@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -814,7 +815,7 @@
                 
                 // Redirecionar para o dashboard
                 setTimeout(() => {
-                    window.location.href = '/dashboard';
+                    window.location.href = 'dashboard.html';
                 }, 1000);
                 
             } catch (error) {
@@ -847,7 +848,7 @@
                 const user = await authManager.login(email, password);
                 
                 alert('Login realizado com sucesso! Redirecionando para o dashboard...');
-                window.location.href = '/dashboard';
+                window.location.href = 'dashboard.html';
                 
             } catch (error) {
                 alert(error.message);
@@ -859,7 +860,7 @@
             }
         });
 
-        // Login com Google (modo desenvolvimento)
+        // Login com Google (simulado - em produção, integrar com Google OAuth)
         googleLoginBtn.addEventListener('click', async function() {
             const btn = this;
             btn.textContent = 'Conectando...';
@@ -867,14 +868,15 @@
             btn.disabled = true;
             
             try {
-                // Em modo de desenvolvimento, simular login Google
-                const mockToken = 'mock_google_token_' + Date.now();
-                const user = await authManager.loginWithGoogle(mockToken);
+                // Simular token do Google (em produção, usar Google OAuth)
+                const mockGoogleToken = 'mock_google_token_' + Date.now();
                 
-                alert('Login com Google realizado com sucesso! (modo dev) Redirecionando...');
-                window.location.href = '/dashboard';
+                const user = await authManager.loginWithGoogle(mockGoogleToken);
+                
+                alert('Login com Google realizado com sucesso! Redirecionando...');
+                window.location.href = 'dashboard.html';
             } catch (error) {
-                alert('Erro ao conectar com Google: ' + error.message);
+                alert(error.message);
             } finally {
                 btn.textContent = 'Google';
                 btn.classList.remove('btn-loading');
@@ -882,33 +884,7 @@
             }
         });
 
-        // Para produção, descomente e configure:
-        /*
-        function initializeGoogleAuth() {
-            google.accounts.id.initialize({
-                client_id: 'YOUR_GOOGLE_CLIENT_ID', // Configure no Google Cloud Console
-                callback: handleGoogleCredential
-            });
-            google.accounts.id.prompt();
-        }
-
-        async function handleGoogleCredential(response) {
-            try {
-                const user = await authManager.loginWithGoogle(response.credential);
-                alert('Login com Google realizado com sucesso! Redirecionando...');
-                window.location.href = '/dashboard';
-            } catch (error) {
-                alert(error.message);
-            } finally {
-                const btn = document.getElementById('google-login');
-                btn.textContent = 'Google';
-                btn.classList.remove('btn-loading');
-                btn.disabled = false;
-            }
-        }
-        */
-
-        // Login com Apple (modo desenvolvimento)
+        // Login com Apple (simulado - em produção, integrar com Apple Sign In)
         appleLoginBtn.addEventListener('click', async function() {
             const btn = this;
             btn.textContent = 'Conectando...';
@@ -916,53 +892,21 @@
             btn.disabled = true;
             
             try {
-                // Em modo de desenvolvimento, simular login Apple
-                const mockToken = 'mock_apple_token_' + Date.now();
-                const user = await authManager.loginWithApple(mockToken);
+                // Simular token da Apple (em produção, usar Apple Sign In)
+                const mockAppleToken = 'mock_apple_token_' + Date.now();
                 
-                alert('Login com Apple realizado com sucesso! (modo dev) Redirecionando...');
-                window.location.href = '/dashboard';
+                const user = await authManager.loginWithApple(mockAppleToken);
+                
+                alert('Login com Apple realizado com sucesso! Redirecionando...');
+                window.location.href = 'dashboard.html';
             } catch (error) {
-                alert('Erro ao conectar com Apple: ' + error.message);
+                alert(error.message);
             } finally {
                 btn.textContent = 'Apple';
                 btn.classList.remove('btn-loading');
                 btn.disabled = false;
             }
         });
-
-        // Para produção, descomente e configure:
-        /*
-        function initializeAppleAuth() {
-            AppleID.auth.init({
-                clientId: 'com.barbearia.ducorte', // Configure no Apple Developer Console
-                scope: 'name email',
-                redirectURI: window.location.origin + '/login',
-                state: 'origin:web'
-            });
-            
-            AppleID.auth.signIn().then(async (response) => {
-                try {
-                    const user = await authManager.loginWithApple(response.authorization.id_token);
-                    alert('Login com Apple realizado com sucesso! Redirecionando...');
-                    window.location.href = '/dashboard';
-                } catch (error) {
-                    alert(error.message);
-                } finally {
-                    const btn = document.getElementById('apple-login');
-                    btn.textContent = 'Apple';
-                    btn.classList.remove('btn-loading');
-                    btn.disabled = false;
-                }
-            }).catch((error) => {
-                alert('Erro no login com Apple: ' + error.message);
-                const btn = document.getElementById('apple-login');
-                btn.textContent = 'Apple';
-                btn.classList.remove('btn-loading');
-                btn.disabled = false;
-            });
-        }
-        */
 
         // Validação de senha em tempo real
         document.getElementById('confirmar-senha').addEventListener('input', function() {

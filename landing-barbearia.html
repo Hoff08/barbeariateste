@@ -11,6 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <!-- Inclusão da Biblioteca Swiper.js (CSS) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
@@ -21,6 +24,158 @@
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background-color: #f6f5ef; color: #0e0e0e; line-height: 1.4; overflow-x: hidden; }
+        
+        /* --- CABEÇALHO INTELIGENTE COM GLASSMORPHISM --- */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(246, 245, 239, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+            transform: translateY(-100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .header.visible {
+            transform: translateY(0);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f06a42;
+            text-decoration: none;
+        }
+        
+        .header-menu-btn {
+            background: none;
+            border: none;
+            color: #0e0e0e;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .header-menu-btn:hover {
+            background: rgba(240, 106, 66, 0.1);
+            color: #f06a42;
+        }
+        
+        /* --- MENU DE NAVEGAÇÃO EM TELA CHEIA --- */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(246, 245, 239, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .nav-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            text-align: center;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav-overlay.active .nav-content {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .nav-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4rem;
+        }
+        
+        .nav-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f06a42;
+        }
+        
+        .nav-close-btn {
+            background: none;
+            border: none;
+            color: #0e0e0e;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-close-btn:hover {
+            background: rgba(240, 106, 66, 0.1);
+            color: #f06a42;
+        }
+        
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .nav-link {
+            font-size: 2.5rem;
+            font-weight: 500;
+            color: #0e0e0e;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: #f06a42;
+            transform: translateX(10px);
+        }
+        
+        .nav-cta {
+            background: #f06a42;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(240, 106, 66, 0.3);
+        }
         
         /* --- Seções e Containers --- */
         .hero-section {
@@ -163,6 +318,11 @@
         @media (max-width: 992px) { .main-headline, .section-title { font-size: 64px; } }
         
         @media (max-width: 768px) {
+            .header { padding: 1rem; }
+            .header-logo { font-size: 1.5rem; }
+            .nav-link { font-size: 2rem; }
+            .nav-content { padding: 0 2rem; }
+            
             .hero-section { padding: 100px 16px 80px; min-height: auto; }
             .page-section, .hero-section { padding-left: 16px; padding-right: 16px; }
             .page-section { padding-top: 60px; padding-bottom: 60px; }
@@ -247,6 +407,33 @@
 </head>
 <body>
 
+    <!-- CABEÇALHO INTELIGENTE -->
+    <header class="header" id="header">
+        <div class="header-content">
+            <a href="#" class="header-logo">FORTE</a>
+            <button class="header-menu-btn" id="menuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- MENU DE NAVEGAÇÃO EM TELA CHEIA -->
+    <div class="nav-overlay" id="navOverlay">
+        <div class="nav-content">
+            <div class="nav-header">
+                <div class="nav-logo">FORTE</div>
+                <button class="nav-close-btn" id="closeMenuBtn">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="#professionals-section" class="nav-link">Ver planos vips</a>   
+            </nav>
+            <a href="/login" class="nav-cta">Login</a>
+        </div>
+    </div>
+
     <section class="hero-section">
         <div class="content-container">
             <div class="social-proof animate"><div class="profile-images"><img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Cliente 1" class="profile-image"><img src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Cliente 2" class="profile-image"><img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Cliente 3" class="profile-image"></div><span>+500 clientes satisfeitos</span></div>
@@ -296,7 +483,7 @@
         </div>
     </section>
 
-    <button class="floating-appointment-btn animate" onclick="window.location.href='/login'"><span class="appointment-icon">✂️</span>Agendar</button>
+    <button id="floatingAppointmentBtn" class="floating-appointment-btn animate" onclick="window.location.href='/login'"><span class="appointment-icon">✂️</span>Agendar</button>
 
 
     <!-- Inclusão da Biblioteca Swiper.js (JS) -->
@@ -305,6 +492,55 @@
     <script>
         // Scripts Gerais
         // Modal removido - agora redireciona para login
+
+        // Controle do cabeçalho inteligente
+        let lastScrollTop = 0;
+        const header = document.getElementById('header');
+        const menuBtn = document.getElementById('menuBtn');
+        const navOverlay = document.getElementById('navOverlay');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+
+        // Função para controlar visibilidade do cabeçalho
+        function handleHeaderVisibility() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > 100) {
+                header.classList.add('visible');
+            } else {
+                header.classList.remove('visible');
+            }
+            
+            lastScrollTop = scrollTop;
+        }
+
+        // Função para abrir menu
+        function openMenu() {
+            navOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Previne rolagem
+        }
+
+        // Função para fechar menu
+        function closeMenu() {
+            navOverlay.classList.remove('active');
+            document.body.style.overflow = ''; // Restaura rolagem
+        }
+
+        // Event listeners
+        window.addEventListener('scroll', handleHeaderVisibility);
+        menuBtn.addEventListener('click', openMenu);
+        closeMenuBtn.addEventListener('click', closeMenu);
+        navOverlay.addEventListener('click', (e) => {
+            if (e.target === navOverlay) {
+                closeMenu();
+            }
+        });
+
+        // Fechar menu com tecla ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navOverlay.classList.contains('active')) {
+                closeMenu();
+            }
+        });
 
         function revealOnScroll() {
             document.querySelectorAll('.animate').forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight * 0.95) { el.classList.add('visible'); } });
@@ -317,12 +553,26 @@
             const ctaButton = document.getElementById('ctaScheduleBtn');
             if (!ctaButton) return;
             
+            // Garantir redirecionamento também via JS
+            ctaButton.addEventListener('click', function() {
+                window.location.href = '/login';
+            });
+
             // Tooltip simples para desktop
             const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
             if (!isTouchDevice) {
                 ctaButton.addEventListener('mouseenter', () => ctaButton.classList.add('show-tooltip'));
                 ctaButton.addEventListener('mouseleave', () => ctaButton.classList.remove('show-tooltip'));
             }
+        })();
+
+        // Botão flutuante: garantir redirecionamento
+        (function() {
+            const floatingBtn = document.getElementById('floatingAppointmentBtn');
+            if (!floatingBtn) return;
+            floatingBtn.addEventListener('click', function() {
+                window.location.href = '/login';
+            });
         })();
 
         (function() {
